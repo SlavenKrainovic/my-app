@@ -9,6 +9,7 @@ const GearboxSelect = ({ gearboxes, selectedGearbox, onGearboxChange }) => {
     <FormControl fullWidth sx={{ mb: 2 }}>
       <InputLabel id="gearbox-select-label">Select Gearbox</InputLabel>
       <Select
+        sx={{ width: '100%', minHeight: '30px', fontSize: '0.8rem', padding: '2px 6px', border: '1px solid #ccc', borderRadius: '4px' }}
         labelId="gearbox-select-label"
         id="gearbox-select"
         value={selectedGearbox || ''}

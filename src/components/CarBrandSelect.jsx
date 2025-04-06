@@ -9,6 +9,7 @@ const CarBrandSelect = ({ brands, selectedBrand, onBrandChange }) => {
     <FormControl fullWidth sx={{ mb: 2 }}>
       <InputLabel id="car-brand-select-label">Select Car Brand</InputLabel>
       <Select
+        sx={{ width: '100%', fontSize: '0.8rem', padding: '2px 6px', border: '1px solid #ccc', borderRadius: '4px' }}
         labelId="car-brand-select-label"
         id="car-brand-select"
         value={selectedBrand}

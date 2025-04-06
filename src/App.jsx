@@ -26,46 +26,48 @@ function App() {
   } = useGearboxCalculator();
 
   return (
-    <Box sx={{ minWidth: 500, p: 2 }}>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
+    <div className="container">
+      <Box sx={{ minWidth: 500, p: 2 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      {loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <CircularProgress />
-        </Box>
-      )}
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <CircularProgress />
+          </Box>
+        )}
 
-      <CarBrandSelect
-        brands={carBrands}
-        selectedBrand={selectedBrand}
-        onBrandChange={handleBrandChange}
-      />
+        <CarBrandSelect
+          brands={carBrands}
+          selectedBrand={selectedBrand}
+          onBrandChange={handleBrandChange}
+        />
 
-      <GearboxSelect
-        gearboxes={gearboxes}
-        selectedGearbox={selectedGearboxName}
-        onGearboxChange={handleGearboxChange}
-      />
+        <GearboxSelect
+          gearboxes={gearboxes}
+          selectedGearbox={selectedGearboxName}
+          onGearboxChange={handleGearboxChange}
+        />
 
-      {selectedGearbox.name && (
-        <>
-          <GearboxTable
-            selectedGearbox={selectedGearbox}
-            userInput={userInput}
-            onInputChange={handleInputChange}
-            onCalculate={calculateSpeeds}
-          />
+        {selectedGearbox.name && (
+          <>
+            <GearboxTable
+              selectedGearbox={selectedGearbox}
+              userInput={userInput}
+              onInputChange={handleInputChange}
+              onCalculate={calculateSpeeds}
+            />
 
-          {chartData.data && chartData.data.length > 0 && (
-            <SpeedChart chartData={chartData} />
-          )}
-        </>
-      )}
-    </Box>
+            {chartData.data && chartData.data.length > 0 && (
+              <SpeedChart chartData={chartData} />
+            )}
+          </>
+        )}
+      </Box>
+    </div>
   );
 }
 

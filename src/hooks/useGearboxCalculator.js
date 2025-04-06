@@ -9,10 +9,10 @@ export const useGearboxCalculator = () => {
   const [selectedGearbox, setSelectedGearbox] = useState({});
   const [chartData, setChartData] = useState({ data: [], maxSpeed: 0 });
   const [userInput, setUserInput] = useState({
-    tyreWidth: '',
-    tyreProfile: '',
-    wheelDiameter: '',
-    maxRpm: ''
+    tyreWidth: '205',
+    tyreProfile: '50',
+    wheelDiameter: '15',
+    maxRpm: '7500'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
