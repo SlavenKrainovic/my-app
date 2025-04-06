@@ -10,68 +10,104 @@ import {
 } from "recharts";
 import PropTypes from 'prop-types';
 
-const COLORS = [
-  '#1f77b4', // blue
-  '#ff7f0e', // orange
-  '#2ca02c', // green
-  '#d62728', // red
-  '#9467bd', // purple
-  '#8c564b', // brown
-  '#e377c2', // pink
-];
-
 const SpeedChart = ({ chartData }) => {
   if (!chartData.data || chartData.data.length === 0) {
     return null;
   }
 
-  // Get a sample data point to see which gears are present
-  const samplePoint = chartData.data[0];
-  const availableGears = Object.keys(samplePoint)
-    .filter(key => key.startsWith('gear'))
-    .sort((a, b) => {
-      const numA = parseInt(a.replace('gear', ''));
-      const numB = parseInt(b.replace('gear', ''));
-      return numA - numB;
-    });
+  // Get unique gears from the data
+  const gears = [...new Set(chartData.data.map(item => item.gear))]
+    .filter(gear => gear !== undefined)
+    .sort((a, b) => a - b);
+
+  // Get max RPM from the data
+  const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
+
+  // Generate colors for each gear
+  const colors = {
+    1: '#FF4136', // Red
+    2: '#FF851B', // Orange
+    3: '#FFDC00', // Yellow
+    4: '#2ECC40', // Green
+    5: '#0074D9', // Blue
+    6: '#B10DC9', // Purple
+    7: '#85144b', // Maroon
+  };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div style={{ 
+          backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+          padding: '8px 12px',
+          border: '1px solid #ddd',
+          borderRadius: '4px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          pointerEvents: 'none',
+          userSelect: 'none'
+        }}>
+          <p style={{ margin: '0', color: '#333', fontWeight: 600 }}>
+            Gear {data.gear}
+          </p>
+          <p style={{ margin: '4px 0 0 0', color: '#666' }}>
+            Speed: {data.speed.toFixed(1)} km/h
+          </p>
+          <p style={{ margin: '4px 0 0 0', color: '#666' }}>
+            RPM: {data.rpm}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <ComposedChart
         data={chartData.data}
         margin={{
-          top: 20,
+          top: 5,
           right: 30,
-          bottom: 20,
-          left: 30,
+          left: 20,
+          bottom: 5,
         }}
       >
-        <CartesianGrid stroke="#f5f5f5" />
-        <XAxis
-          dataKey="rpm"
+        <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.5} />
+        <XAxis 
           type="number"
-          domain={[0, 'dataMax']}
-          label={{ value: "RPM", position: "bottom", offset: 0 }}
+          dataKey="speed" 
+          name="Speed"
+          label={{ value: "Speed (km/h)", position: "bottom" }}
+          domain={[0, 'auto']}
+          tickCount={10}
         />
-        <YAxis
-          unit="km/h"
-          domain={[0, Math.ceil(chartData.maxSpeed / 10) * 10]}
-          label={{ value: "Speed (km/h)", angle: -90, position: "insideLeft" }}
+        <YAxis 
+          type="number"
+          dataKey="rpm"
+          name="RPM"
+          label={{ value: "RPM", angle: -90, position: "insideLeft" }}
+          domain={[0, maxRpm]}
+          tickCount={8}
         />
         <Tooltip 
-          formatter={(value) => value.toFixed(1) + " km/h"}
-          labelFormatter={(value) => value.toFixed(0) + " RPM"}
+          content={<CustomTooltip />}
+          isAnimationActive={false}
+          cursor={{ strokeDasharray: '3 3' }}
         />
         <Legend verticalAlign="top" height={36} />
-        {availableGears.map((gear, index) => (
+        {gears.map((gear) => (
           <Line
             key={gear}
             type="monotone"
-            dataKey={gear}
-            name={`${index + 1}. Gear`}
-            stroke={COLORS[index]}
-            dot={false}
+            dataKey="rpm"
+            data={chartData.data.filter(item => item.gear === gear)}
+            name={`${gear}. brzina`}
+            stroke={colors[gear]}
             strokeWidth={2}
+            dot={false}
+            activeDot={{ r: 4 }}
+            isAnimationActive={false}
           />
         ))}
       </ComposedChart>
@@ -83,13 +119,8 @@ SpeedChart.propTypes = {
   chartData: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape({
       rpm: PropTypes.number.isRequired,
-      gear1: PropTypes.number,
-      gear2: PropTypes.number,
-      gear3: PropTypes.number,
-      gear4: PropTypes.number,
-      gear5: PropTypes.number,
-      gear6: PropTypes.number,
-      gear7: PropTypes.number
+      gear: PropTypes.number.isRequired,
+      speed: PropTypes.number.isRequired
     })).isRequired,
     maxSpeed: PropTypes.number.isRequired
   }).isRequired

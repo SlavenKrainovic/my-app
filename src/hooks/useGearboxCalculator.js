@@ -1,5 +1,32 @@
 import { useState, useEffect } from 'react';
-import { getCarBrands, getGearboxesByBrand, calculateGearboxSpeeds } from '../services/gearboxes';
+import { getCarBrands, getGearboxesByBrand } from '../services/gearboxes';
+
+const calculateSpeed = (rpm, gearRatio, finalDrive, tyreWidth, tyreProfile, wheelDiameter) => {
+  // Convert inputs to numbers and handle invalid values
+  rpm = Number(rpm);
+  gearRatio = Number(gearRatio);
+  finalDrive = Number(finalDrive);
+  tyreWidth = Number(tyreWidth);
+  tyreProfile = Number(tyreProfile);
+  wheelDiameter = Number(wheelDiameter);
+
+  // Basic validation
+  if ([rpm, gearRatio, finalDrive, tyreWidth, tyreProfile, wheelDiameter].some(val => !val || isNaN(val))) {
+    return 0;
+  }
+
+  // Calculate tire circumference in meters
+  const tireHeight = (tyreWidth * tyreProfile / 100) * 2 + (wheelDiameter * 25.4);
+  const tireCircumference = (tireHeight * Math.PI) / 1000;
+
+  // Calculate wheel RPM
+  const wheelRpm = rpm / (gearRatio * finalDrive);
+
+  // Calculate speed in km/h
+  const speedKmh = (wheelRpm * tireCircumference * 60) / 1000;
+
+  return speedKmh;
+};
 
 export const useGearboxCalculator = () => {
   const [carBrands, setCarBrands] = useState([]);
@@ -112,68 +139,48 @@ export const useGearboxCalculator = () => {
     }
   };
 
-  const calculateSpeeds = async () => {
+  const calculateSpeeds = () => {
     if (!selectedGearbox.name) {
       setError('No gearbox selected');
       return;
     }
 
-    try {
-      setLoading(true);
-      setError(null);
+    const maxRpm = parseFloat(userInput.maxRpm);
+    const rpmStep = 250; // Smaller step for smoother lines
+    const allData = [];
+    let maxSpeed = 0;
 
-      const data = {
-        maxRpm: parseInt(userInput.maxRpm) || 0,
-        finalDrive: selectedGearbox.finalDrive,
-        tyreWidth: parseInt(userInput.tyreWidth) || 0,
-        tyreProfile: parseInt(userInput.tyreProfile) || 0,
-        wheelDiameter: parseInt(userInput.wheelDiameter) || 0,
-        gearRatio1: selectedGearbox.gear1 || 0,
-        gearRatio2: selectedGearbox.gear2 || 0,
-        gearRatio3: selectedGearbox.gear3 || 0,
-        gearRatio4: selectedGearbox.gear4 || 0,
-        gearRatio5: selectedGearbox.gear5 || 0,
-        gearRatio6: selectedGearbox.gear6 || 0,
-        gearRatio7: selectedGearbox.gear7 || 0
-      };
+    // Calculate for each gear
+    for (let i = 1; i <= 7; i++) {
+      const gearRatio = selectedGearbox[`gear${i}`];
+      if (!gearRatio) continue;
 
-      console.log('Sending data to calculate:', data);
-      const response = await calculateGearboxSpeeds(data);
-      console.log('Received speed data:', response);
-      
-      if (response) {
-        let maxSpeed = 0;
-        const transformedData = [];
+      // Calculate multiple points for smooth lines
+      for (let rpm = 0; rpm <= maxRpm; rpm += rpmStep) {
+        const speed = calculateSpeed(
+          rpm,
+          gearRatio,
+          selectedGearbox.finalDrive,
+          userInput.tyreWidth,
+          userInput.tyreProfile,
+          userInput.wheelDiameter
+        );
 
-        // Get all RPM points and sort them
-        const rpmPoints = Object.keys(response).map(Number).sort((a, b) => a - b);
-
-        // Transform data for each RPM point
-        rpmPoints.forEach(rpm => {
-          const speeds = response[rpm];
-          const dataPoint = { rpm };
-
-          // Add speed for each gear if it exists
-          for (let i = 1; i <= 7; i++) {
-            const gearKey = `gear${i}`;
-            const speed = speeds[gearKey];
-            if (speed !== undefined && speed !== null && isFinite(Number(speed))) {
-              dataPoint[gearKey] = Number(speed);
-              maxSpeed = Math.max(maxSpeed, Number(speed));
-            }
-          }
-
-          transformedData.push(dataPoint);
-        });
-
-        setChartData({ data: transformedData, maxSpeed });
+        if (speed > 0) {
+          allData.push({
+            gear: i,
+            rpm: Math.round(rpm),
+            speed: parseFloat(speed.toFixed(1))
+          });
+          maxSpeed = Math.max(maxSpeed, speed);
+        }
       }
-    } catch (err) {
-      setError('Failed to calculate speeds');
-      console.error('Error calculating speeds:', err);
-    } finally {
-      setLoading(false);
     }
+
+    setChartData({
+      data: allData.sort((a, b) => a.speed - b.speed), // Sort by speed for better line rendering
+      maxSpeed: Math.ceil(maxSpeed)
+    });
   };
 
   return {
