@@ -19,89 +19,72 @@ const GearboxTable = ({
   
   return (
     <TableContainer component={Paper} sx={{ mb: 4 }}>
-<Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>GearboxName</TableCell>
-            <TableCell>FirstGear</TableCell>
-            <TableCell>SecondGear</TableCell>
-            <TableCell>ThirdGear</TableCell>
-            <TableCell>FourthGear</TableCell>
-            <TableCell>FifthGear</TableCell>
-            <TableCell>SixthGear</TableCell>
-            <TableCell>SeventhGear</TableCell>
-            <TableCell>FinalDrive</TableCell>
-            <TableCell>TyreWidth</TableCell>
-            <TableCell>TyreProfile</TableCell>
-            <TableCell>WheelDiameter</TableCell>
-            <TableCell>MaxRpm</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>{selectedGearbox.name || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear1?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear2?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear3?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear4?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear5?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear6?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.gear7?.toFixed(3) || '-'}</TableCell>
-            <TableCell>{selectedGearbox.finalDrive?.toFixed(3) || '-'}</TableCell>
-            <TableCell>
-              <TextField
-                type="number"
-                variant="outlined"
-                size="small"
-                value={userInput.tyreWidth}
-                onChange={(e) => onInputChange('tyreWidth', e.target.value)}
-                inputProps={{ min: 0 }}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                type="number"
-                variant="outlined"
-                size="small"
-                value={userInput.tyreProfile}
-                onChange={(e) => onInputChange('tyreProfile', e.target.value)}
-                inputProps={{ min: 0 }}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                type="number"
-                variant="outlined"
-                size="small"
-                value={userInput.wheelDiameter}
-                onChange={(e) => onInputChange('wheelDiameter', e.target.value)}
-                inputProps={{ min: 0 }}
-              />
-            </TableCell>
-            <TableCell>
-              <TextField
-                type="number"
-                variant="outlined"
-                size="small"
-                value={userInput.maxRpm}
-                onChange={(e) => onInputChange('maxRpm', e.target.value)}
-                inputProps={{ min: 0 }}
-              />
-            </TableCell>
-            <TableCell>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onCalculate}
-                disabled={!userInput.tyreWidth || !userInput.tyreProfile || !userInput.wheelDiameter || !userInput.maxRpm}
-              >
-                Calculate
-              </Button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+<ul class="gearbox-info-list">
+  <li><strong>Gearbox Name:</strong> {selectedGearbox.name || '-'}</li>
+  <li><strong>First Gear:</strong> {selectedGearbox.gear1?.toFixed(3) || '-'}</li>
+  <li><strong>Second Gear:</strong> {selectedGearbox.gear2?.toFixed(3) || '-'}</li>
+  <li><strong>Third Gear:</strong> {selectedGearbox.gear3?.toFixed(3) || '-'}</li>
+  <li><strong>Fourth Gear:</strong> {selectedGearbox.gear4?.toFixed(3) || '-'}</li>
+  <li><strong>Fifth Gear:</strong> {selectedGearbox.gear5?.toFixed(3) || '-'}</li>
+  <li><strong>Sixth Gear:</strong> {selectedGearbox.gear6?.toFixed(3) || '-'}</li>
+  <li><strong>Seventh Gear:</strong> {selectedGearbox.gear7?.toFixed(3) || '-'}</li>
+  <li><strong>Final Drive:</strong> {selectedGearbox.finalDrive?.toFixed(3) || '-'}</li>
+  <li>
+    <strong>Tyre Width:</strong>
+    <TextField
+      type="number"
+      variant="outlined"
+      size="small"
+      value={userInput.tyreWidth}
+      onChange={(e) => onInputChange('tyreWidth', e.target.value)}
+      inputProps={{ min: 0 }}
+    />
+  </li>
+  <li>
+    <strong>Tyre Profile:</strong>
+    <TextField
+      type="number"
+      variant="outlined"
+      size="small"
+      value={userInput.tyreProfile}
+      onChange={(e) => onInputChange('tyreProfile', e.target.value)}
+      inputProps={{ min: 0 }}
+    />
+  </li>
+  <li>
+    <strong>Wheel Diameter:</strong>
+    <TextField
+      type="number"
+      variant="outlined"
+      size="small"
+      value={userInput.wheelDiameter}
+      onChange={(e) => onInputChange('wheelDiameter', e.target.value)}
+      inputProps={{ min: 0 }}
+    />
+  </li>
+  <li>
+    <strong>Max RPM:</strong>
+    <TextField
+      type="number"
+      variant="outlined"
+      size="small"
+      value={userInput.maxRpm}
+      onChange={(e) => onInputChange('maxRpm', e.target.value)}
+      inputProps={{ min: 0 }}
+    />
+  </li>
+  <li>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={onCalculate}
+      disabled={!userInput.tyreWidth || !userInput.tyreProfile || !userInput.wheelDiameter || !userInput.maxRpm}
+    >
+      Calculate
+    </Button>
+  </li>
+</ul>
+
 
     </TableContainer>
   );

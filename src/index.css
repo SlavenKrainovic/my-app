@@ -53,7 +53,42 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.gearbox-info-list {
+  list-style-type: none; /* Removes the default bullets */
+  padding: 20px; /* Adds padding to the left and right sides */
+  margin: 0;
+  text-align: left; /* Aligns all content to the left */
+  background-color: #f0f0f0; /* Greyish background color */
+  border-radius: 8px; /* Optional: Adds rounded corners */
+}
 
+.gearbox-info-list li {
+  margin-bottom: 15px; /* Adds spacing between list items */
+  font-size: 16px; /* Optional: Adjusts text size */
+}
+.gearbox-info-list li strong {
+  display: inline-block;
+  margin-right: 10px;
+  width: 150px; /* Adjust label width to align properly */
+  font-weight: bold;
+  text-align: left; /* Ensures the label is left-aligned */
+}
+.gearbox-info-list li input {
+  margin-left: 10px; /* Space between label and input */
+  width: 150px; /* Adjust input width */
+  padding: 5px; /* Adds padding to input fields */
+  text-align: left; /* Aligns the input text to the left */
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  background-color: #ffffff; /* Keeps the input fields white */
+  border: 1px solid #ccc; /* Optional: Adds a light border to the input fields */
+}
+.gearbox-info-list li button{
+  display: block;
+  width: 150px; /* Optional: Keeps button width consistent with inputs */
+  padding: 5px; /* Optional: Adds padding to the button */
+  margin-left: auto; /* Ensures left-alignment is maintained for other items */
+  margin-right: auto; /* Centers the button horizontally */
+}
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
