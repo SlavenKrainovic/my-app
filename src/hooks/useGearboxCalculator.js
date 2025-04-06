@@ -103,6 +103,15 @@ export const useGearboxCalculator = () => {
     }));
   };
 
+  const handleGearRatioChange = (gearNumber, value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox[`gear${gearNumber}`] = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 }); // Reset chart when ratios change
+    }
+  };
+
   const calculateSpeeds = async () => {
     if (!selectedGearbox.name) {
       setError('No gearbox selected');
@@ -180,6 +189,7 @@ export const useGearboxCalculator = () => {
     handleBrandChange,
     handleGearboxChange,
     handleInputChange,
+    handleGearRatioChange,
     calculateSpeeds
   };
 };

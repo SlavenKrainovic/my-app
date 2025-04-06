@@ -19,7 +19,8 @@ function App() {
     handleBrandChange,
     handleGearboxChange,
     handleInputChange,
-    calculateSpeeds
+    calculateSpeeds,
+    handleGearRatioChange
   } = useGearboxCalculator();
 
   return (
@@ -41,57 +42,28 @@ function App() {
 
           {selectedGearbox.name && (
             <>
+              {/* Gear Ratios */}
               <div className="gearbox-info">
-                <h2>Speed Ratios</h2>
+                <h2>Gear Ratios</h2>
                 <div className="ratio-grid">
-                  {selectedGearbox.gear1 !== undefined && selectedGearbox.gear1 !== null && (
-                    <div className="ratio-item">
-                      <label>1st Gear:</label>
-                      <span>{selectedGearbox.gear1}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear2 !== undefined && selectedGearbox.gear2 !== null && (
-                    <div className="ratio-item">
-                      <label>2nd Gear:</label>
-                      <span>{selectedGearbox.gear2}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear3 !== undefined && selectedGearbox.gear3 !== null && (
-                    <div className="ratio-item">
-                      <label>3rd Gear:</label>
-                      <span>{selectedGearbox.gear3}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear4 !== undefined && selectedGearbox.gear4 !== null && (
-                    <div className="ratio-item">
-                      <label>4th Gear:</label>
-                      <span>{selectedGearbox.gear4}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear5 !== undefined && selectedGearbox.gear5 !== null && (
-                    <div className="ratio-item">
-                      <label>5th Gear:</label>
-                      <span>{selectedGearbox.gear5}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear6 !== undefined && selectedGearbox.gear6 !== null && (
-                    <div className="ratio-item">
-                      <label>6th Gear:</label>
-                      <span>{selectedGearbox.gear6}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.gear7 !== undefined && selectedGearbox.gear7 !== null && (
-                    <div className="ratio-item">
-                      <label>7th Gear:</label>
-                      <span>{selectedGearbox.gear7}</span>
-                    </div>
-                  )}
-                  {selectedGearbox.finalDrive !== undefined && selectedGearbox.finalDrive !== null && (
-                    <div className="ratio-item">
-                      <label>Final Drive:</label>
-                      <span>{selectedGearbox.finalDrive}</span>
-                    </div>
-                  )}
+                  {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => {
+                    const gearValue = selectedGearbox[`gear${gearNumber}`];
+                    if (gearValue === undefined || gearValue === null || gearValue === 0) return null;
+                    
+                    return (
+                      <div key={gearNumber} className="ratio-item">
+                        <label>Gear {gearNumber}:</label>
+                        <input
+                          type="number"
+                          value={gearValue}
+                          onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
+                          step="0.001"
+                          min="0"
+                          className="ratio-input"
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
