@@ -36,7 +36,7 @@ const SpeedChart = ({ chartData }) => {
     });
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="100%" height={300}>
       <ComposedChart
         data={chartData.data}
         margin={{
