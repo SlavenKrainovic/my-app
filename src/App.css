@@ -21,17 +21,17 @@ html, body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 320px 1fr;
-  gap: 25px;
+  gap: 20px;
 }
 
 .form-container {
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   height: fit-content;
 }
@@ -39,27 +39,27 @@ html, body {
 .chart-container {
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px 25px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  min-width: 750px;
+  min-width: 850px;
 }
 
 h1 {
   font-size: 18px;
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #333;
 }
 
 h2 {
   font-size: 15px;
   color: #444;
-  margin: 15px 0 10px;
+  margin: 10px 0 6px;
 }
 
 .form-section label {
   font-weight: 500;
-  margin-top: 6px;
+  margin-top: 4px;
   display: block;
   color: #444;
   font-size: 13px;
@@ -69,12 +69,12 @@ input[type="text"],
 input[type="number"],
 select {
   width: 100%;
-  padding: 5px 8px;
+  padding: 6px 12px;
   margin-top: 4px;
   margin-bottom: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 14px;
   transition: border 0.2s ease;
   box-sizing: border-box;
 }
@@ -95,7 +95,7 @@ button {
   border-radius: 4px;
   font-size: 14px;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -105,8 +105,8 @@ button:hover {
 .error-message {
   color: #dc3545;
   font-size: 13px;
-  margin-top: 8px;
-  padding: 8px;
+  margin-top: 6px;
+  padding: 6px;
   background-color: #fff5f5;
   border-radius: 4px;
   border: 1px solid #ffebeb;
@@ -116,7 +116,7 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 350px;
+  height: 300px;
   color: #666;
   font-size: 14px;
 }
@@ -125,24 +125,25 @@ button:hover {
 .gearbox-info {
   background: #f8f9fa;
   border-radius: 6px;
-  padding: 12px;
-  margin: 12px 0;
+  padding: 12px 15px;
+  margin: 8px 0;
 }
 
 .ratio-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 6px;
 }
 
 .ratio-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 12px;
+  padding: 4px 10px;
   background: white;
   border-radius: 4px;
   border: 1px solid #eee;
+  min-width: 130px;
 }
 
 .ratio-item label {
@@ -150,6 +151,8 @@ button:hover {
   font-weight: 500;
   color: #666;
   font-size: 12px;
+  white-space: nowrap;
+  margin-right: 6px;
 }
 
 .ratio-item span {
@@ -160,8 +163,8 @@ button:hover {
 }
 
 .ratio-input {
-  width: 85px !important;
-  padding: 4px 8px !important;
+  width: 75px !important;
+  padding: 3px 6px !important;
   margin: 0 !important;
   font-family: monospace;
   font-size: 13px;
@@ -178,7 +181,7 @@ button:hover {
 /* Select component styles */
 .MuiFormControl-root {
   width: 100%;
-  margin-bottom: 10px !important;
+  margin-bottom: 8px !important;
 }
 
 .MuiInputLabel-root {
@@ -199,7 +202,7 @@ button:hover {
 }
 
 #results {
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 14px;
 }
 
