@@ -6,16 +6,16 @@ import PropTypes from 'prop-types';
 
 const CarBrandSelect = ({ brands, selectedBrand, onBrandChange }) => {
   return (
-    <FormControl fullWidth sx={{ mb: 2 }}>
+    <FormControl fullWidth>
       <InputLabel id="car-brand-select-label">Select Car Brand</InputLabel>
       <Select
         labelId="car-brand-select-label"
         id="car-brand-select"
-        value={selectedBrand}
+        value={selectedBrand || ''}
         label="Select Car Brand"
         onChange={onBrandChange}
       >
-        {brands.map((brand) => (
+        {brands?.map((brand) => (
           <MenuItem key={brand} value={brand}>
             {brand}
           </MenuItem>
@@ -27,7 +27,7 @@ const CarBrandSelect = ({ brands, selectedBrand, onBrandChange }) => {
 
 CarBrandSelect.propTypes = {
   brands: PropTypes.arrayOf(PropTypes.string).isRequired,
-  selectedBrand: PropTypes.string.isRequired,
+  selectedBrand: PropTypes.string,
   onBrandChange: PropTypes.func.isRequired,
 };
 

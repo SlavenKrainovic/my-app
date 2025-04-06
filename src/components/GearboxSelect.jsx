@@ -6,16 +6,16 @@ import PropTypes from 'prop-types';
 
 const GearboxSelect = ({ gearboxes, selectedGearbox, onGearboxChange }) => {
   return (
-    <FormControl fullWidth sx={{ mb: 2 }}>
+    <FormControl fullWidth>
       <InputLabel id="gearbox-select-label">Select Gearbox</InputLabel>
       <Select
         labelId="gearbox-select-label"
         id="gearbox-select"
         value={selectedGearbox || ''}
-        label="Gearbox"
+        label="Select Gearbox"
         onChange={onGearboxChange}
       >
-        {gearboxes.map((box) => (
+        {gearboxes?.map((box) => (
           <MenuItem key={box.name} value={box.name}>
             {box.name}
           </MenuItem>

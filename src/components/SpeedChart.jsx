@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import {
   ComposedChart,
   Line,
@@ -22,52 +21,61 @@ const COLORS = [
 ];
 
 const SpeedChart = ({ chartData }) => {
-  console.log('Chart received data:', chartData);
-
   if (!chartData.data || chartData.data.length === 0) {
     return null;
   }
 
+  // Get a sample data point to see which gears are present
+  const samplePoint = chartData.data[0];
+  const availableGears = Object.keys(samplePoint)
+    .filter(key => key.startsWith('gear'))
+    .sort((a, b) => {
+      const numA = parseInt(a.replace('gear', ''));
+      const numB = parseInt(b.replace('gear', ''));
+      return numA - numB;
+    });
+
   return (
-    <Box sx={{ height: 400, mb: 4 }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <ComposedChart
-          data={chartData.data}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis
-            dataKey="rpm"
-            type="number"
-            domain={[0, 'dataMax']}
-            label={{ value: "RPM", position: "insideBottomRight", offset: 0 }}
+    <ResponsiveContainer width="100%" height={300}>
+      <ComposedChart
+        data={chartData.data}
+        margin={{
+          top: 20,
+          right: 30,
+          bottom: 20,
+          left: 30,
+        }}
+      >
+        <CartesianGrid stroke="#f5f5f5" />
+        <XAxis
+          dataKey="rpm"
+          type="number"
+          domain={[0, 'dataMax']}
+          label={{ value: "RPM", position: "bottom", offset: 0 }}
+        />
+        <YAxis
+          unit="km/h"
+          domain={[0, Math.ceil(chartData.maxSpeed / 10) * 10]}
+          label={{ value: "Speed (km/h)", angle: -90, position: "insideLeft" }}
+        />
+        <Tooltip 
+          formatter={(value) => value.toFixed(1) + " km/h"}
+          labelFormatter={(value) => value.toFixed(0) + " RPM"}
+        />
+        <Legend verticalAlign="top" height={36} />
+        {availableGears.map((gear, index) => (
+          <Line
+            key={gear}
+            type="monotone"
+            dataKey={gear}
+            name={`${index + 1}. Gear`}
+            stroke={COLORS[index]}
+            dot={false}
+            strokeWidth={2}
           />
-          <YAxis
-            unit="km/h"
-            domain={[0, Math.ceil(chartData.maxSpeed)]}
-            label={{ value: "Speed (km/h)", angle: -90, position: "insideLeft" }}
-          />
-          <Tooltip />
-          <Legend />
-          {['gear1', 'gear2', 'gear3', 'gear4', 'gear5', 'gear6', 'gear7'].map((gear, index) => (
-            <Line
-              key={gear}
-              type="monotone"
-              dataKey={gear}
-              name={`Gear ${gear.slice(-1)}`}
-              stroke={COLORS[index % COLORS.length]}
-              dot={false}
-              connectNulls={true}
-            />
-          ))}
-        </ComposedChart>
-      </ResponsiveContainer>
-    </Box>
+        ))}
+      </ComposedChart>
+    </ResponsiveContainer>
   );
 };
 

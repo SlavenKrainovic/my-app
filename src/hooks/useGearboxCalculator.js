@@ -9,10 +9,10 @@ export const useGearboxCalculator = () => {
   const [selectedGearbox, setSelectedGearbox] = useState({});
   const [chartData, setChartData] = useState({ data: [], maxSpeed: 0 });
   const [userInput, setUserInput] = useState({
-    tyreWidth: '',
-    tyreProfile: '',
-    wheelDiameter: '',
-    maxRpm: ''
+    tyreWidth: '205',
+    tyreProfile: '50',
+    wheelDiameter: '15',
+    maxRpm: '7500'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -67,6 +67,7 @@ export const useGearboxCalculator = () => {
     setSelectedBrand(brand);
     setSelectedGearboxName('');
     setSelectedGearbox({});
+    setChartData({ data: [], maxSpeed: 0 });
   };
 
   const handleGearboxChange = (event) => {
@@ -74,10 +75,25 @@ export const useGearboxCalculator = () => {
     setSelectedGearboxName(name);
     const selected = gearboxes.find(g => g.name === name);
     if (selected) {
-      setSelectedGearbox(selected);
+      // Clean up the gearbox data to remove undefined/null/0 gears
+      const cleanedGearbox = {
+        name: selected.name,
+        finalDrive: selected.finalDrive,
+      };
+      
+      // Only include gears that exist and have values
+      for (let i = 1; i <= 7; i++) {
+        const gearValue = selected[`gear${i}`];
+        if (gearValue !== undefined && gearValue !== null && gearValue !== 0) {
+          cleanedGearbox[`gear${i}`] = gearValue;
+        }
+      }
+      
+      setSelectedGearbox(cleanedGearbox);
     } else {
       setSelectedGearbox({});
     }
+    setChartData({ data: [], maxSpeed: 0 });
   };
 
   const handleInputChange = (field, value) => {
@@ -85,6 +101,15 @@ export const useGearboxCalculator = () => {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleGearRatioChange = (gearNumber, value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox[`gear${gearNumber}`] = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 }); // Reset chart when ratios change
+    }
   };
 
   const calculateSpeeds = async () => {
@@ -118,21 +143,28 @@ export const useGearboxCalculator = () => {
       
       if (response) {
         let maxSpeed = 0;
-        Object.values(response).forEach(speeds => {
-          Object.values(speeds).forEach(speed => {
-            if (!isNaN(speed) && speed !== "Infinity") {
+        const transformedData = [];
+
+        // Get all RPM points and sort them
+        const rpmPoints = Object.keys(response).map(Number).sort((a, b) => a - b);
+
+        // Transform data for each RPM point
+        rpmPoints.forEach(rpm => {
+          const speeds = response[rpm];
+          const dataPoint = { rpm };
+
+          // Add speed for each gear if it exists
+          for (let i = 1; i <= 7; i++) {
+            const gearKey = `gear${i}`;
+            const speed = speeds[gearKey];
+            if (speed !== undefined && speed !== null && isFinite(Number(speed))) {
+              dataPoint[gearKey] = Number(speed);
               maxSpeed = Math.max(maxSpeed, Number(speed));
             }
-          });
-        });
+          }
 
-        const transformedData = Object.entries(response).map(([rpm, speeds]) => ({
-          rpm: Number(rpm),
-          ...Object.entries(speeds).reduce((acc, [key, value]) => ({
-            ...acc,
-            [key]: (!isNaN(value) && value !== "Infinity") ? Number(value) : null
-          }), {})
-        }));
+          transformedData.push(dataPoint);
+        });
 
         setChartData({ data: transformedData, maxSpeed });
       }
@@ -157,6 +189,7 @@ export const useGearboxCalculator = () => {
     handleBrandChange,
     handleGearboxChange,
     handleInputChange,
+    handleGearRatioChange,
     calculateSpeeds
   };
 };
