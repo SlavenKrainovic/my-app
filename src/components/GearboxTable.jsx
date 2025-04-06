@@ -19,7 +19,7 @@ const GearboxTable = ({
   
   return (
     <TableContainer component={Paper} sx={{ mb: 4 }}>
-      <Table>
+<Table>
         <TableHead>
           <TableRow>
             <TableCell>GearboxName</TableCell>
@@ -102,6 +102,7 @@ const GearboxTable = ({
           </TableRow>
         </TableBody>
       </Table>
+
     </TableContainer>
   );
 };
