@@ -120,7 +120,7 @@ export const useGearboxCalculator = () => {
         let maxSpeed = 0;
         Object.values(response).forEach(speeds => {
           Object.values(speeds).forEach(speed => {
-            if (!isNaN(speed) && speed !== "Infinity") {
+            if (isFinite(Number(speed))) {
               maxSpeed = Math.max(maxSpeed, Number(speed));
             }
           });
@@ -130,7 +130,7 @@ export const useGearboxCalculator = () => {
           rpm: Number(rpm),
           ...Object.entries(speeds).reduce((acc, [key, value]) => ({
             ...acc,
-            [key]: (!isNaN(value) && value !== "Infinity") ? Number(value) : null
+            [key]: (isFinite(Number(value)) ? Number(value) : null)
           }), {})
         }));
 
