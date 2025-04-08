@@ -146,7 +146,7 @@ export const useGearboxCalculator = () => {
     }
 
     const maxRpm = parseFloat(userInput.maxRpm);
-    const rpmStep = 250; // Smaller step for smoother lines
+    const rpmStep = 50;
     const allData = [];
     let maxSpeed = 0;
 
@@ -178,7 +178,7 @@ export const useGearboxCalculator = () => {
     }
 
     setChartData({
-      data: allData.sort((a, b) => a.speed - b.speed), // Sort by speed for better line rendering
+      data: allData.sort((a, b) => a.speed - b.speed),
       maxSpeed: Math.ceil(maxSpeed)
     });
   };
