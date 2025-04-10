@@ -97,7 +97,7 @@ const SpeedChart = ({ chartData }) => {
           bottom: 5,
         }}
         style={{
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#e9ecef',  // Cool Grey
           borderRadius: '8px',
           padding: '20px'
         }}
