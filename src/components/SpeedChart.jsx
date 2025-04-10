@@ -107,7 +107,7 @@ const SpeedChart = ({ chartData }) => {
             tickCount={15}
             stroke="#999"
             tick={{ fill: '#999' }}
-            tickFormatter={value => `${(value/1000).toFixed(1)}k`}
+            tickFormatter={value => value.toLocaleString()}
           />
           <Legend 
             verticalAlign="top" 

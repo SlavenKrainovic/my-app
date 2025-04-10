@@ -112,6 +112,16 @@ export const useGearboxCalculator = () => {
     }
   };
 
+  const handleFinalDriveChange = (value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox.finalDrive = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 });
+      setTableData([]);
+    }
+  };
+
   const calculateSpeeds = async () => {
     if (!selectedGearbox.name) {
       setError('No gearbox selected');
@@ -203,6 +213,7 @@ export const useGearboxCalculator = () => {
     handleGearboxChange,
     handleInputChange,
     handleGearRatioChange,
+    handleFinalDriveChange,
     calculateSpeeds
   };
 };

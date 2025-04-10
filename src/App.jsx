@@ -20,7 +20,8 @@ function App() {
     handleGearboxChange,
     handleInputChange,
     calculateSpeeds,
-    handleGearRatioChange
+    handleGearRatioChange,
+    handleFinalDriveChange
   } = useGearboxCalculator();
 
   return (
@@ -42,6 +43,22 @@ function App() {
 
           {selectedGearbox.name && (
             <>
+              {/* Final Drive Ratio */}
+              <div className="final-drive-section">
+                <h2>Final Drive Ratio</h2>
+                <div className="final-drive-input">
+                  <label>Final Drive:</label>
+                  <input
+                    type="number"
+                    value={selectedGearbox.finalDrive || ''}
+                    onChange={(e) => handleFinalDriveChange(e.target.value)}
+                    step="0.001"
+                    min="0"
+                    className="ratio-input"
+                  />
+                </div>
+              </div>
+
               {/* Gear Ratios */}
               <div className="gearbox-info">
                 <h2>Gear Ratios</h2>

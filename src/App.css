@@ -178,6 +178,35 @@ button:hover {
   border-color: #007bff;
 }
 
+/* Final drive section styles */
+.final-drive-section {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin: 8px 0;
+}
+
+.final-drive-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.final-drive-input label {
+  margin: 0;
+  font-weight: 500;
+  color: #666;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
 /* Select component styles */
 .MuiFormControl-root {
   width: 100%;
