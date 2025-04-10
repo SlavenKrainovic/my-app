@@ -5,7 +5,8 @@ import {
   YAxis,
   CartesianGrid,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Tooltip
 } from "recharts";
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -119,6 +120,14 @@ const SpeedChart = ({ chartData }) => {
                 {value}
               </span>
             )}
+          />
+          <Tooltip 
+            cursor={{
+              stroke: '#666',
+              strokeWidth: 1,
+              strokeDasharray: '4 4'
+            }}
+            content={() => null}  // Hide tooltip content
           />
           {gears.map(gear => (
             <Line
