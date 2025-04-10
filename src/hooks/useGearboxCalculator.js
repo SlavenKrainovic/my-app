@@ -150,26 +150,26 @@ export const useGearboxCalculator = () => {
       // Transform the API response for chart and table
       const chartPoints = [];
       const tableRows = {};
-      const speeds = Object.keys(data).map(Number).sort((a, b) => a - b);
+      const rpms = Object.keys(data).map(Number).sort((a, b) => a - b);
       let maxSpeed = 0;
 
-      speeds.forEach(speed => {
-        const gearData = data[speed];
-        Object.entries(gearData).forEach(([gear, rpm]) => {
-          if (rpm > 0) {
+      rpms.forEach(rpm => {
+        const gearSpeeds = data[rpm];
+        Object.entries(gearSpeeds).forEach(([gear, speed]) => {
+          if (speed > 0) {
             const gearNumber = parseInt(gear.replace('gear', ''));
             chartPoints.push({
               gear: gearNumber,
               rpm,
-              speed: parseFloat(speed)
+              speed
             });
 
-            if (!tableRows[speed]) {
-              tableRows[speed] = { speed };
+            if (!tableRows[rpm]) {
+              tableRows[rpm] = { rpm };
             }
-            tableRows[speed][`gear${gearNumber}`] = rpm;
+            tableRows[rpm][`gear${gearNumber}`] = speed;
             
-            maxSpeed = Math.max(maxSpeed, parseFloat(speed));
+            maxSpeed = Math.max(maxSpeed, speed);
           }
         });
       });
@@ -178,7 +178,7 @@ export const useGearboxCalculator = () => {
         data: chartPoints,
         maxSpeed: Math.ceil(maxSpeed)
       });
-      setTableData(Object.values(tableRows).sort((a, b) => a.speed - b.speed));
+      setTableData(Object.values(tableRows).sort((a, b) => a.rpm - b.rpm));
       setError(null);
     } catch (err) {
       setError('Failed to calculate speeds');
