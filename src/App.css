@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -16,27 +17,282 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+=======
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(145deg, #0a0a0f 0%, #11121a 100%);
+  color: white;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  overflow-x: hidden;
+  position: relative;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: -100px;
+  width: 200%;
+  height: 100%;
+  background: radial-gradient(circle at 85% 30%, rgba(255, 80, 0, 0.1), transparent 50%),
+              linear-gradient(100deg, rgba(255, 40, 0, 0.25) 20%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0.9;
+  animation: move-lines 12s linear infinite;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+@keyframes move-lines {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  gap: 32px;
+}
+
+.form-container {
+  background: rgba(20, 22, 30, 0.8);
+  border-radius: 16px;
+  padding: 36px;
+  box-shadow: 0 0 20px rgba(255, 40, 0, 0.1);
+  height: fit-content;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart-container {
+  background: rgba(20, 22, 30, 0.8);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 0 20px rgba(255, 40, 0, 0.1);
+  min-width: 850px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #fff;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 16px;
+  color: #fff;
+  margin: 16px 0 12px;
+  font-weight: 500;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background-color: rgba(30, 31, 38, 0.8);
+  color: white;
+  margin-bottom: 15px;
+  font-size: 14px;
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: #ff5100;
+  box-shadow: 0 0 5px rgba(255, 81, 0, 0.5);
+}
+
+button {
+  width: 100%;
+  background: linear-gradient(145deg, #ff5100, #ff2d00);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(255, 81, 0, 0.3);
+  font-weight: 500;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #ff6b00, #ff3d00);
+  transform: translateY(-1px);
+}
+
+.gearbox-info {
+  background: rgba(30, 31, 38, 0.5);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ratio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.ratio-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: rgba(20, 21, 28, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 12px;
+}
+
+.ratio-item label {
+  margin: 0;
+  color: #aaa;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.ratio-input {
+  width: 80px !important;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  font-family: monospace;
+  font-size: 15px;
+  color: #ff5100;
+  font-weight: 500;
+  text-align: center !important;
+  background: rgba(20, 21, 28, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+}
+
+.ratio-input:focus {
+  border-color: #ff5100 !important;
+  box-shadow: 0 0 8px rgba(255, 81, 0, 0.3) !important;
+}
+
+.final-drive-section {
+  background: rgba(30, 31, 38, 0.5);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.final-drive-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(20, 21, 28, 0.8);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 160px;
+  margin: 0 auto;
+}
+
+.final-drive-input label {
+  margin: 0;
+  color: #aaa;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-right: 6px;
+}
+
+select {
+  appearance: none;
+  background-color: rgba(20, 21, 28, 0.8) !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ff5100' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding: 12px 40px 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+select:hover {
+  border-color: rgba(255, 81, 0, 0.5);
+  background-color: rgba(25, 26, 35, 0.8) !important;
+}
+
+select:focus {
+  border-color: #ff5100;
+  box-shadow: 0 0 0 2px rgba(255, 81, 0, 0.2);
+  outline: none;
+}
+
+select option {
+  background-color: #1a1b23;
+  color: #ffffff;
+  padding: 12px;
+  font-size: 14px;
+}
+
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.05);
+>>>>>>> Stashed changes
+}
+
+.select-container {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.select-container::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    rgba(255, 81, 0, 0) 0%,
+    rgba(255, 81, 0, 0.2) 50%,
+    rgba(255, 81, 0, 0) 100%
+  );
+}
+
+<<<<<<< Updated upstream
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
+=======
+.select-container label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: 500;
+>>>>>>> Stashed changes
 }
