@@ -29,13 +29,13 @@ const SpeedChart = ({ chartData }) => {
 
   // Generate colors for each gear
   const colors = {
-    1: 'rgba(66, 133, 244, 0.75)',   // Google Blue
-    2: 'rgba(52, 168, 83, 0.75)',    // Soft Green
-    3: 'rgba(251, 188, 4, 0.75)',    // Warm Yellow
-    4: 'rgba(234, 67, 53, 0.75)',    // Soft Red
-    5: 'rgba(103, 58, 183, 0.75)',   // Soft Purple
-    6: 'rgba(0, 150, 136, 0.75)',    // Soft Teal
-    7: 'rgba(76, 3, 78, 0.75)',    // Indigo
+    1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
+    2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
+    3: 'rgba(255, 159, 10, 0.8)',   // Apple Orange
+    4: 'rgba(255, 69, 58, 0.8)',    // Apple Red
+    5: 'rgba(191, 90, 242, 0.8)',   // Apple Purple
+    6: 'rgba(0, 199, 190, 0.8)',    // Apple Teal
+    7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
   };
 
   const handleMouseMove = (data) => {
@@ -67,16 +67,16 @@ const SpeedChart = ({ chartData }) => {
             bottom: 15,
           }}
           style={{
-            backgroundColor: '#e9ecef',  // Cool Grey
-            borderRadius: '15px',
-            padding: '50px'
+            backgroundColor: '#ffffff',
+            borderRadius: '20px',
+            padding: '24px'
           }}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
           <CartesianGrid 
             strokeDasharray="3 3" 
-            stroke="#333" 
+            stroke="rgba(0, 0, 0, 0.1)" 
             vertical={false}
           />
           <XAxis 
@@ -86,12 +86,20 @@ const SpeedChart = ({ chartData }) => {
             label={{ 
               value: "KPH", 
               position: "bottom", 
-              style: { fill: '#999' } 
+              style: { 
+                fill: '#86868b',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px'
+              } 
             }}
             domain={[0, 'auto']}
             tickCount={15}
-            stroke="#999"
-            tick={{ fill: '#999' }}
+            stroke="#86868b"
+            tick={{ 
+              fill: '#86868b',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '12px'
+            }}
           />
           <YAxis 
             type="number"
@@ -101,12 +109,20 @@ const SpeedChart = ({ chartData }) => {
               value: "RPM", 
               angle: -90, 
               position: "insideLeft", 
-              style: { fill: '#999' } 
+              style: { 
+                fill: '#86868b',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px'
+              } 
             }}
             domain={[0, roundedMaxRpm]}
             tickCount={15}
-            stroke="#999"
-            tick={{ fill: '#999' }}
+            stroke="#86868b"
+            tick={{ 
+              fill: '#86868b',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '12px'
+            }}
             tickFormatter={value => value.toLocaleString()}
           />
           <Legend 
@@ -115,7 +131,10 @@ const SpeedChart = ({ chartData }) => {
             formatter={(value) => (
               <span style={{ 
                 color: colors[parseInt(value.split(' ')[1])],
-                opacity: 0.8
+                opacity: 1,
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px',
+                fontWeight: '500'
               }}>
                 {value}
               </span>
@@ -149,28 +168,32 @@ const SpeedChart = ({ chartData }) => {
       {hoverData && (
         <div style={{
           marginTop: '20px',
-          padding: '15px',
-          backgroundColor: '#e9ecef',  // Matching chart background
-          borderRadius: '8px',
-          color: '#333',              // Darker text for better contrast
+          padding: '16px',
+          backgroundColor: '#f5f5f7',
+          borderRadius: '12px',
+          color: '#1d1d1f',
           display: 'flex',
           flexWrap: 'wrap',
           gap: '20px',
           alignItems: 'center',
-          border: '1px solid #ccc'    // Subtle border
+          border: '1px solid #e5e5e5'
         }}>
           <div style={{ 
             fontWeight: 500,
-            minWidth: '120px'
+            minWidth: '120px',
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+            fontSize: '13px'
           }}>
             Speed: {hoverData.speed.toFixed(0)} KPH
           </div>
           {gears.map(gear => (
             <div key={gear} style={{ 
-              color: hoverData.gearData[gear] ? colors[gear].replace('0.75', '1') : '#999',
+              color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
-              minWidth: '140px'
+              minWidth: '140px',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '13px'
             }}>
               Gear {gear}: {hoverData.gearData[gear] ? 
                 `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` : 

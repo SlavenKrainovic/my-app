@@ -2,13 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 html, body {
   width: 100%;
   height: 100%;
-  background: #f4f6f9;
-  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f7;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -24,92 +25,99 @@ html, body {
   max-width: 1400px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 20px;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
 }
 
 .form-container {
   background: white;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   height: fit-content;
 }
 
 .chart-container {
   background: white;
-  border-radius: 8px;
-  padding: 15px 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   min-width: 850px;
 }
 
 h1 {
-  font-size: 18px;
-  text-align: center;
-  margin-bottom: 10px;
-  color: #333;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 16px;
+  color: #1d1d1f;
+  letter-spacing: -0.2px;
 }
 
 h2 {
-  font-size: 15px;
-  color: #444;
-  margin: 10px 0 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin: 16px 0 8px;
+  letter-spacing: -0.2px;
 }
 
 .form-section label {
-  font-weight: 500;
-  margin-top: 4px;
+  font-weight: 400;
+  margin-top: 6px;
   display: block;
-  color: #444;
-  font-size: 13px;
+  color: #86868b;
+  font-size: 12px;
 }
 
 input[type="text"],
 input[type="number"],
 select {
   width: 100%;
-  padding: 6px 12px;
+  padding: 6px 10px;
   margin-top: 4px;
   margin-bottom: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border 0.2s ease;
-  box-sizing: border-box;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #ffffff;
+  color: #1d1d1f;
+  transition: all 0.2s ease;
 }
 
 input:focus,
 select:focus {
-  border-color: #007bff;
+  border-color: #0071e3;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
 
 button {
   width: 100%;
   padding: 8px;
-  background-color: #007bff;
+  background-color: #0071e3;
   color: white;
-  font-weight: bold;
+  font-weight: 500;
   border: none;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 6px;
+  font-size: 13px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 12px;
+  transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #0077ED;
+  transform: translateY(-1px);
 }
 
 .error-message {
-  color: #dc3545;
+  color: #ff3b30;
   font-size: 13px;
-  margin-top: 6px;
-  padding: 6px;
-  background-color: #fff5f5;
-  border-radius: 4px;
-  border: 1px solid #ffebeb;
+  margin-top: 8px;
+  padding: 12px;
+  background-color: rgba(255, 59, 48, 0.1);
+  border-radius: 8px;
 }
 
 .loading {
@@ -117,72 +125,66 @@ button:hover {
   justify-content: center;
   align-items: center;
   height: 300px;
-  color: #666;
+  color: #86868b;
   font-size: 14px;
 }
 
 /* Gearbox info styles */
 .gearbox-info {
-  background: #f8f9fa;
-  border-radius: 6px;
-  padding: 12px 15px;
+  background: #f5f5f7;
+  border-radius: 8px;
+  padding: 12px;
   margin: 8px 0;
 }
 
 .ratio-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
+  gap: 8px;
 }
 
 .ratio-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 10px;
+  padding: 6px 8px;
   background: white;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  min-width: 130px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
 }
 
 .ratio-item label {
   margin: 0;
-  font-weight: 500;
-  color: #666;
+  font-weight: 400;
+  color: #86868b;
   font-size: 12px;
   white-space: nowrap;
   margin-right: 6px;
 }
 
-.ratio-item span {
-  font-family: monospace;
-  font-size: 13px;
-  color: #007bff;
-  font-weight: 600;
-}
-
 .ratio-input {
-  width: 75px !important;
+  width: 50px !important;
   padding: 3px 6px !important;
   margin: 0 !important;
-  font-family: monospace;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', monospace;
   font-size: 13px;
-  color: #007bff;
-  font-weight: 600;
+  color: #0071e3;
+  font-weight: 500;
   text-align: right;
+  background: white !important;
+  border: 1px solid #e5e5e5 !important;
 }
 
 .ratio-input:focus {
-  outline: 1px solid #007bff;
-  border-color: #007bff;
+  border-color: #0071e3 !important;
+  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.1) !important;
 }
 
 /* Final drive section styles */
 .final-drive-section {
-  background: #f8f9fa;
-  border-radius: 6px;
-  padding: 12px 15px;
+  background: #f5f5f7;
+  border-radius: 8px;
+  padding: 12px;
   margin: 8px 0;
 }
 
@@ -190,18 +192,18 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 10px;
+  padding: 6px 8px;
   background: white;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  max-width: 200px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
+  max-width: 160px;
   margin: 0 auto;
 }
 
 .final-drive-input label {
   margin: 0;
-  font-weight: 500;
-  color: #666;
+  font-weight: 400;
+  color: #86868b;
   font-size: 12px;
   white-space: nowrap;
   margin-right: 6px;
