@@ -94,12 +94,12 @@ const SpeedChart = ({ chartData }) => {
           top: 5,
           right: 30,
           left: 20,
-          bottom: 5,
+          bottom: 15,
         }}
         style={{
           backgroundColor: '#e9ecef',  // Cool Grey
-          borderRadius: '8px',
-          padding: '20px'
+          borderRadius: '15px',
+          padding: '50px'
         }}
       >
         <CartesianGrid 
@@ -112,7 +112,7 @@ const SpeedChart = ({ chartData }) => {
           dataKey="speed" 
           name="Speed"
           label={{ 
-            value: "MPH", 
+            value: "KPH", 
             position: "bottom", 
             style: { fill: '#999' } 
           }}
@@ -131,8 +131,8 @@ const SpeedChart = ({ chartData }) => {
             position: "insideLeft", 
             style: { fill: '#999' } 
           }}
-          domain={[2000, roundedMaxRpm]}
-          tickCount={8}
+          domain={[0, roundedMaxRpm]}
+          tickCount={10}
           stroke="#999"
           tick={{ fill: '#999' }}
           tickFormatter={value => `${(value/1000).toFixed(0)}k`}
