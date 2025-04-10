@@ -29,13 +29,13 @@ const SpeedChart = ({ chartData }) => {
 
   // Generate colors for each gear
   const colors = {
-    1: '#FF0000', // Red
-    2: '#FF0000', // Red
-    3: '#FF0000', // Red
-    4: '#00BFFF', // Blue
-    5: '#00BFFF', // Blue
-    6: '#00BFFF', // Blue
-    7: '#00BFFF', // Blue
+    1: 'rgba(66, 133, 244, 0.75)',   // Google Blue
+    2: 'rgba(52, 168, 83, 0.75)',    // Soft Green
+    3: 'rgba(251, 188, 4, 0.75)',    // Warm Yellow
+    4: 'rgba(234, 67, 53, 0.75)',    // Soft Red
+    5: 'rgba(103, 58, 183, 0.75)',   // Soft Purple
+    6: 'rgba(0, 150, 136, 0.75)',    // Soft Teal
+    7: 'rgba(76, 3, 78, 0.75)',    // Indigo
   };
 
   const handleMouseMove = (data) => {
@@ -150,13 +150,14 @@ const SpeedChart = ({ chartData }) => {
         <div style={{
           marginTop: '20px',
           padding: '15px',
-          backgroundColor: '#1e1e1e',
+          backgroundColor: '#e9ecef',  // Matching chart background
           borderRadius: '8px',
-          color: '#fff',
+          color: '#333',              // Darker text for better contrast
           display: 'flex',
           flexWrap: 'wrap',
           gap: '20px',
-          alignItems: 'center'
+          alignItems: 'center',
+          border: '1px solid #ccc'    // Subtle border
         }}>
           <div style={{ 
             fontWeight: 500,
@@ -166,7 +167,7 @@ const SpeedChart = ({ chartData }) => {
           </div>
           {gears.map(gear => (
             <div key={gear} style={{ 
-              color: hoverData.gearData[gear] ? colors[gear] : '#666',
+              color: hoverData.gearData[gear] ? colors[gear].replace('0.75', '1') : '#999',
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
               minWidth: '140px'
