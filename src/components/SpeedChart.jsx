@@ -4,13 +4,15 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer
 } from "recharts";
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const SpeedChart = ({ chartData }) => {
+  const [hoverData, setHoverData] = useState(null);
+
   if (!chartData?.data?.length) {
     return null;
   }
@@ -35,150 +37,140 @@ const SpeedChart = ({ chartData }) => {
     7: '#00BFFF', // Blue
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      // Get all gear data at this speed point
-      const speed = label;
+  const handleMouseMove = (data) => {
+    if (data && data.activePayload) {
+      const speed = data.activeLabel;
       const gearData = chartData.data
         .filter(item => Math.abs(item.speed - speed) < 0.1)
         .reduce((acc, item) => {
           acc[item.gear] = item.rpm;
           return acc;
         }, {});
-
-      return (
-        <div style={{ 
-          backgroundColor: '#1e1e1e', 
-          padding: '8px 12px',
-          border: '1px solid #333',
-          borderRadius: '4px',
-          fontSize: '13px',
-          userSelect: 'none',
-          color: '#fff'
-        }}>
-          <p style={{ 
-            margin: '0 0 8px 0', 
-            fontWeight: 500,
-            borderBottom: '1px solid #333',
-            paddingBottom: '4px'
-          }}>
-            Speed: {speed.toFixed(0)} MPH
-          </p>
-          {gears.map(gear => (
-            <p key={gear} style={{ 
-              margin: '4px 0', 
-              color: gearData[gear] ? colors[gear] : '#666',
-              fontWeight: 500,
-              opacity: gearData[gear] ? 1 : 0.7,
-              display: 'flex',
-              justifyContent: 'space-between',
-              minWidth: '140px'
-            }}>
-              <span>Gear {gear}:</span>
-              <span style={{ marginLeft: '8px', fontFamily: 'monospace' }}>
-                {gearData[gear] ? `${Math.round(gearData[gear]).toLocaleString()} RPM` : 'N/A'}
-              </span>
-            </p>
-          ))}
-        </div>
-      );
+      setHoverData({ speed, gearData });
     }
-    return null;
+  };
+
+  const handleMouseLeave = () => {
+    setHoverData(null);
   };
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart
-        data={chartData.data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 15,
-        }}
-        style={{
-          backgroundColor: '#e9ecef',  // Cool Grey
-          borderRadius: '15px',
-          padding: '50px'
-        }}
-      >
-        <CartesianGrid 
-          strokeDasharray="3 3" 
-          stroke="#333" 
-          vertical={false}
-        />
-        <XAxis 
-          type="number"
-          dataKey="speed" 
-          name="Speed"
-          label={{ 
-            value: "KPH", 
-            position: "bottom", 
-            style: { fill: '#999' } 
+    <div>
+      <ResponsiveContainer width="100%" height={400}>
+        <LineChart
+          data={chartData.data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 15,
           }}
-          domain={[0, 'auto']}
-          tickCount={10}
-          stroke="#999"
-          tick={{ fill: '#999' }}
-        />
-        <YAxis 
-          type="number"
-          dataKey="rpm"
-          name="RPM"
-          label={{ 
-            value: "RPM", 
-            angle: -90, 
-            position: "insideLeft", 
-            style: { fill: '#999' } 
+          style={{
+            backgroundColor: '#e9ecef',  // Cool Grey
+            borderRadius: '15px',
+            padding: '50px'
           }}
-          domain={[0, roundedMaxRpm]}
-          tickCount={10}
-          stroke="#999"
-          tick={{ fill: '#999' }}
-          tickFormatter={value => `${(value/1000).toFixed(0)}k`}
-        />
-        <Tooltip 
-          content={<CustomTooltip />}
-          cursor={{ 
-            stroke: '#666',
-            strokeWidth: 1,
-            strokeDasharray: '4 4'
-          }}
-        />
-        <Legend 
-          verticalAlign="top" 
-          height={36}
-          formatter={(value) => (
-            <span style={{ 
-              color: colors[parseInt(value.split(' ')[1])],
-              opacity: 0.8
-            }}>
-              {value}
-            </span>
-          )}
-        />
-        {gears.map(gear => (
-          <Line
-            key={gear}
-            type="monotone"
-            data={chartData.data.filter(d => d.gear === gear)}
-            dataKey="rpm"
-            name={`Gear ${gear}`}
-            stroke={colors[gear]}
-            strokeWidth={2}
-            dot={false}
-            activeDot={{ 
-              r: 4, 
-              fill: colors[gear],
-              stroke: '#fff',
-              strokeWidth: 1
-            }}
-            connectNulls={true}
-            isAnimationActive={false}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <CartesianGrid 
+            strokeDasharray="3 3" 
+            stroke="#333" 
+            vertical={false}
           />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
+          <XAxis 
+            type="number"
+            dataKey="speed" 
+            name="Speed"
+            label={{ 
+              value: "KPH", 
+              position: "bottom", 
+              style: { fill: '#999' } 
+            }}
+            domain={[0, 'auto']}
+            tickCount={15}
+            stroke="#999"
+            tick={{ fill: '#999' }}
+          />
+          <YAxis 
+            type="number"
+            dataKey="rpm"
+            name="RPM"
+            label={{ 
+              value: "RPM", 
+              angle: -90, 
+              position: "insideLeft", 
+              style: { fill: '#999' } 
+            }}
+            domain={[0, roundedMaxRpm]}
+            tickCount={15}
+            stroke="#999"
+            tick={{ fill: '#999' }}
+            tickFormatter={value => `${(value/1000).toFixed(1)}k`}
+          />
+          <Legend 
+            verticalAlign="top" 
+            height={36}
+            formatter={(value) => (
+              <span style={{ 
+                color: colors[parseInt(value.split(' ')[1])],
+                opacity: 0.8
+              }}>
+                {value}
+              </span>
+            )}
+          />
+          {gears.map(gear => (
+            <Line
+              key={gear}
+              type="monotone"
+              data={chartData.data.filter(d => d.gear === gear)}
+              dataKey="rpm"
+              name={`Gear ${gear}`}
+              stroke={colors[gear]}
+              strokeWidth={2}
+              dot={false}
+              activeDot={false}
+              connectNulls={true}
+              isAnimationActive={false}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+      {hoverData && (
+        <div style={{
+          marginTop: '20px',
+          padding: '15px',
+          backgroundColor: '#1e1e1e',
+          borderRadius: '8px',
+          color: '#fff',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '20px',
+          alignItems: 'center'
+        }}>
+          <div style={{ 
+            fontWeight: 500,
+            minWidth: '120px'
+          }}>
+            Speed: {hoverData.speed.toFixed(0)} KPH
+          </div>
+          {gears.map(gear => (
+            <div key={gear} style={{ 
+              color: hoverData.gearData[gear] ? colors[gear] : '#666',
+              opacity: hoverData.gearData[gear] ? 1 : 0.7,
+              fontWeight: 500,
+              minWidth: '140px'
+            }}>
+              Gear {gear}: {hoverData.gearData[gear] ? 
+                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` : 
+                'N/A'
+              }
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
