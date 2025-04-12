@@ -63,24 +63,19 @@ function App() {
               <div className="gearbox-info">
                 <h2>Gear Ratios</h2>
                 <div className="ratio-grid">
-                  {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => {
-                    const gearValue = selectedGearbox[`gear${gearNumber}`];
-                    if (gearValue === undefined || gearValue === null || gearValue === 0) return null;
-                    
-                    return (
-                      <div key={gearNumber} className="ratio-item">
-                        <label>Gear {gearNumber}:</label>
-                        <input
-                          type="number"
-                          value={gearValue}
-                          onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
-                          step="0.001"
-                          min="0"
-                          className="ratio-input"
-                        />
-                      </div>
-                    );
-                  })}
+                  {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => (
+                    <div key={gearNumber} className="ratio-item">
+                      <label>Gear {gearNumber}:</label>
+                      <input
+                        type="number"
+                        value={selectedGearbox[`gear${gearNumber}`] || ''}
+                        onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
+                        step="0.001"
+                        min="0"
+                        className="ratio-input"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
 
