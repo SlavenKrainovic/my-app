@@ -79,40 +79,41 @@ function App() {
                   ))}
                 </div>
               </div>
+              <div class="wheel-config">
+                <h2>Wheel Configuration</h2>
+                <label>Tyre Width:</label>
+                <input 
+                  type="number"
+                  name="tyreWidth"
+                  value={userInput.tyreWidth || ''}
+                  onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
+                />
 
-              <h2>Wheel Configuration</h2>
-              <label>Tyre Width:</label>
-              <input 
-                type="number"
-                name="tyreWidth"
-                value={userInput.tyreWidth || ''}
-                onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
-              />
+                <label>Tyre Profile:</label>
+                <input 
+                  type="number"
+                  name="tyreProfile"
+                  value={userInput.tyreProfile || ''}
+                  onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
+                />
 
-              <label>Tyre Profile:</label>
-              <input 
-                type="number"
-                name="tyreProfile"
-                value={userInput.tyreProfile || ''}
-                onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
-              />
+                <label>Wheel Diameter (inch):</label>
+                <input 
+                  type="number"
+                  name="wheelDiameter"
+                  value={userInput.wheelDiameter || ''}
+                  onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
+                />
 
-              <label>Wheel Diameter (inch):</label>
-              <input 
-                type="number"
-                name="wheelDiameter"
-                value={userInput.wheelDiameter || ''}
-                onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
-              />
-
-              <label>Max RPM:</label>
-              <input 
-                type="number"
-                name="maxRpm"
-                value={userInput.maxRpm}
-                onChange={(e) => handleInputChange('maxRpm', e.target.value)}
-                placeholder="7500"
-              />
+                <label>Max RPM:</label>
+                <input 
+                  type="number"
+                  name="maxRpm"
+                  value={userInput.maxRpm}
+                  onChange={(e) => handleInputChange('maxRpm', e.target.value)}
+                  placeholder="7500"
+                />
+              </div>
 
               <button onClick={calculateSpeeds}>Calculate</button>
 
