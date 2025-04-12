@@ -54,7 +54,7 @@ function App() {
                     onChange={(e) => handleFinalDriveChange(e.target.value)}
                     step="0.001"
                     min="0"
-                    className="ratio-input"
+                    max="9.999"
                   />
                 </div>
               </div>
@@ -72,6 +72,7 @@ function App() {
                         onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
                         step="0.001"
                         min="0"
+                        max="9.999"
                         className="ratio-input"
                       />
                     </div>
