@@ -80,11 +80,10 @@ export const useGearboxCalculator = () => {
         finalDrive: selected.finalDrive,
       };
       
+      // Always include all gears, even if they are 0
       for (let i = 1; i <= 7; i++) {
         const gearValue = selected[`gear${i}`];
-        if (gearValue !== undefined && gearValue !== null && gearValue !== 0) {
-          cleanedGearbox[`gear${i}`] = gearValue;
-        }
+        cleanedGearbox[`gear${i}`] = gearValue !== undefined && gearValue !== null ? gearValue : 0;
       }
       
       setSelectedGearbox(cleanedGearbox);
@@ -105,7 +104,8 @@ export const useGearboxCalculator = () => {
   const handleGearRatioChange = (gearNumber, value) => {
     if (selectedGearbox) {
       const newGearbox = { ...selectedGearbox };
-      newGearbox[`gear${gearNumber}`] = parseFloat(value) || 0;
+      // Allow decimal input by not immediately converting to float
+      newGearbox[`gear${gearNumber}`] = value === '' ? 0 : value;
       setSelectedGearbox(newGearbox);
       setChartData({ data: [], maxSpeed: 0 });
       setTableData([]);
@@ -137,13 +137,14 @@ export const useGearboxCalculator = () => {
         },
         body: JSON.stringify({
           maxRpm: parseInt(userInput.maxRpm),
-          gearRatio1: selectedGearbox.gear1 || 0,
-          gearRatio2: selectedGearbox.gear2 || 0,
-          gearRatio3: selectedGearbox.gear3 || 0,
-          gearRatio4: selectedGearbox.gear4 || 0,
-          gearRatio5: selectedGearbox.gear5 || 0,
-          gearRatio6: selectedGearbox.gear6 || 0,
-          gearRatio7: selectedGearbox.gear7 || 0,
+          // Convert to float only when sending to API
+          gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
+          gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
+          gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
+          gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
+          gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
+          gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
+          gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
           finalDrive: selectedGearbox.finalDrive,
           tyreWidth: parseInt(userInput.tyreWidth),
           tyreProfile: parseInt(userInput.tyreProfile),
