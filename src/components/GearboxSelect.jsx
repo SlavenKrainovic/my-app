@@ -21,6 +21,27 @@ const GearboxSelect = ({ gearboxes, selectedGearbox, onGearboxChange }) => {
           },
           '& .MuiSvgIcon-root': {
             color: 'rgba(255, 255, 255, 0.08)'
+          },
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: 'rgba(255, 255, 255, 0.15)'
+            },
+            '& .MuiSvgIcon-root': {
+              color: 'rgba(255, 255, 255, 0.15)'
+            }
+          }
+        }}
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              bgcolor: '#2d2d2d',
+              '& .MuiMenuItem-root': {
+                color: '#f5f5f5',
+                '&:hover': {
+                  bgcolor: '#3d3d3d'
+                }
+              }
+            }
           }
         }}
       >
