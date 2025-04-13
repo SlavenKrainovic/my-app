@@ -44,9 +44,8 @@ html, body {
 }
 
 .chart-container {
-  background: white;
   border-radius: 20px;
-  padding: 24px;
+  padding: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   min-width: 850px;
   background: transparent;
@@ -167,9 +166,7 @@ button:hover {
   justify-content: flex-start;
   align-items: center;
   padding: 6px 8px;
-  background: white;
   border-radius: 6px;
-  border: 1px solid #e5e5e5;
   width: 100%;
   gap: 2px;
 }
@@ -177,7 +174,7 @@ button:hover {
 .ratio-item label {
   margin: 0;
   font-weight: 400;
-  color: #86868b;
+  color: #d3edf8;
   font-size: 12px;
   white-space: nowrap;
   margin-right: 2px;
@@ -193,7 +190,6 @@ button:hover {
   color: #0071e3;
   font-weight: 500;
   text-align: right;
-  background: white !important;
   border: 1px solid #e5e5e5 !important;
 }
 
@@ -205,7 +201,6 @@ button:hover {
 /* Final drive section styles */
 .final-drive-section {
   border-radius: 8px;
-  padding: 12px;
   margin: 8px 0;
 }
 
@@ -272,9 +267,6 @@ select[name="gearbox"] {
   background-position: right 6px center;
 }
 
-.form-section:first-of-type {
-  margin-top: -4px;
-}
 
 .form-section:first-of-type label {
   margin-top: 0;

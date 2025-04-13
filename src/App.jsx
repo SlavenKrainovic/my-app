@@ -59,7 +59,7 @@ function App() {
               </div>
 
               {/* Gear Ratios */}
-              <div className="gearbox-info">
+              <div>
                 <h2>Gear Ratios</h2>
                 <div className="ratio-grid">
                   {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => (

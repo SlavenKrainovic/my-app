@@ -67,7 +67,6 @@ const SpeedChart = ({ chartData }) => {
             bottom: 15,
           }}
           style={{
-            backgroundColor: '#ffffff',
             borderRadius: '20px',
             padding: '24px'
           }}
@@ -76,7 +75,7 @@ const SpeedChart = ({ chartData }) => {
         >
           <CartesianGrid 
             strokeDasharray="3 3" 
-            stroke="rgba(0, 0, 0, 0.1)" 
+            stroke= "rgba(255, 255, 255, 0.2)"
             vertical={false}
           />
           <XAxis 
@@ -169,14 +168,12 @@ const SpeedChart = ({ chartData }) => {
         <div style={{
           marginTop: '20px',
           padding: '16px',
-          backgroundColor: '#f5f5f7',
           borderRadius: '12px',
           color: '#1d1d1f',
           display: 'flex',
           flexWrap: 'wrap',
           gap: '20px',
-          alignItems: 'center',
-          border: '1px solid #e5e5e5'
+          alignItems: 'center'
         }}>
           <div style={{ 
             fontWeight: 500,
@@ -184,7 +181,8 @@ const SpeedChart = ({ chartData }) => {
             fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
             fontSize: '13px'
           }}>
-            Speed: {hoverData.speed.toFixed(0)} KPH
+            <h3> Speed: {hoverData.speed.toFixed(0)} KPH</h3>
+           
           </div>
           {gears.map(gear => (
             <div key={gear} style={{ 
