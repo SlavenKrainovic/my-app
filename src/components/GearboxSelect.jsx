@@ -7,13 +7,22 @@ import PropTypes from 'prop-types';
 const GearboxSelect = ({ gearboxes, selectedGearbox, onGearboxChange }) => {
   return (
     <FormControl fullWidth>
-      <InputLabel id="gearbox-select-label">Select Gearbox</InputLabel>
+      <InputLabel id="gearbox-select-label" sx={{ color: '#f5f5f5' }}>Select Gearbox</InputLabel>
       <Select
         labelId="gearbox-select-label"
         id="gearbox-select"
         value={selectedGearbox || ''}
         label="Select Gearbox"
         onChange={onGearboxChange}
+        sx={{ 
+          color: '#f5f5f5',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(255, 255, 255, 0.08)'
+          },
+          '& .MuiSvgIcon-root': {
+            color: 'rgba(255, 255, 255, 0.08)'
+          }
+        }}
       >
         {gearboxes?.map((box) => (
           <MenuItem key={box.name} value={box.name}>
