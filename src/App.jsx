@@ -46,8 +46,7 @@ function App() {
               {/* Final Drive Ratio */}
               <div className="final-drive-section">
                 <h2>Final Drive Ratio</h2>
-                <div className="final-drive-input">
-                  
+                <div> 
                   <input
                     type="number"
                     value={selectedGearbox.finalDrive || ''}
