@@ -214,9 +214,9 @@ button:hover {
   justify-content: flex-start;
   align-items: center;
   padding: 6px 8px;
-  background: white;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 6px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   max-width: 160px;
   gap: 2px;
 }
@@ -224,7 +224,7 @@ button:hover {
 .final-drive-input label {
   margin: 0;
   font-weight: 400;
-  color: #86868b;
+  color: #f5f5f5;
   font-size: 12px;
   white-space: nowrap;
   margin-right: 2px;
@@ -237,7 +237,7 @@ button:hover {
   margin: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', monospace;
   font-size: 13px;
-  color: #1d1d1f;
+  color: #f5f5f5;
   font-weight: 500;
   text-align: right;
   background: transparent;
