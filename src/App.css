@@ -68,6 +68,12 @@ h2 {
   letter-spacing: -0.2px;
 }
 
+h3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #d3edf8;
+  letter-spacing: -0.2px;
+}
 .form-section label {
   font-weight: 400;
   margin-top: 6px;
