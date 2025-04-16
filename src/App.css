@@ -1,3 +1,18 @@
+/* Cleaned up for maintainability and consistency */
+
+:root {
+  --primary-color: #0071e3;
+  --secondary-color: #d3edf8;
+  --error-color: #ff3b30;
+  --background-blur: rgba(255, 255, 255, 0.08);
+  --input-bg: transparent;
+  --input-border: #e5e5e5;
+  --input-focus: var(--primary-color);
+  --label-color: #86868b;
+  --form-bg: var(--background-blur);
+  --white: #fff;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -39,8 +54,7 @@ html, body {
   padding: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   height: fit-content;
-  background: rgba(255, 255, 255, 0.08);
-
+  background: var(--form-bg);
 }
 
 .chart-container {
@@ -56,14 +70,14 @@ h1 {
   font-weight: 600;
   text-align: left;
   margin-bottom: 16px;
-  color: #F5F5F5;
+  color: var(--white);
   letter-spacing: -0.2px;
 }
 
 h2 {
   font-size: 13px;
   font-weight: 500;
-  color: #d3edf8;
+  color: var(--secondary-color);
   margin: 16px 0 8px;
   letter-spacing: -0.2px;
 }
@@ -71,14 +85,16 @@ h2 {
 h3 {
   font-size: 13px;
   font-weight: 500;
-  color: #d3edf8;
+  color: var(--secondary-color);
   letter-spacing: -0.2px;
 }
-.form-section label {
+
+.form-section label,
+.ratio-item label {
   font-weight: 400;
   margin-top: 6px;
   display: block;
-  color: #86868b;
+  color: var(--label-color);
   font-size: 12px;
 }
 
@@ -88,17 +104,17 @@ select {
   padding: 6px 10px;
   margin-top: 4px;
   margin-bottom: 8px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   font-size: 13px;
-  background: transparent;
-  color: white;
+  background: var(--input-bg);
+  color: var(--white);
   transition: all 0.2s ease;
 }
 
 input:focus,
 select:focus {
-  border-color: #0071e3;
+  border-color: var(--input-focus);
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
@@ -107,7 +123,7 @@ button {
   width: 100%;
   padding: 8px;
   background-color: #1c41b0;
-  color: white;
+  color: var(--white);
   font-weight: 500;
   border: none;
   border-radius: 6px;
@@ -123,7 +139,7 @@ button:hover {
 }
 
 .error-message {
-  color: #ff3b30;
+  color: var(--error-color);
   font-size: 13px;
   margin-top: 8px;
   padding: 12px;
@@ -136,15 +152,14 @@ button:hover {
   justify-content: center;
   align-items: center;
   height: 300px;
-  color: #86868b;
+  color: var(--label-color);
   font-size: 14px;
 }
 
 .wheel-config label {
-  color:#d3edf8;
+  color: var(--secondary-color);
 }
 
-/* Gearbox info styles */
 .gearbox-info {
   border-radius: 8px;
   padding: 12px;
@@ -177,33 +192,22 @@ button:hover {
   gap: 2px;
 }
 
-.ratio-item label {
-  margin: 0;
-  font-weight: 400;
-  color: #d3edf8;
-  font-size: 12px;
-  white-space: nowrap;
-  margin-right: 2px;
-  min-width: 45px;
-}
-
 .ratio-input {
   width: 65px !important;
   padding: 3px 6px !important;
   margin: 0 !important;
   font-size: 13px;
-  color: #0071e3;
+  color: var(--primary-color);
   font-weight: 500;
   text-align: right;
-  border: 1px solid #e5e5e5 !important;
+  border: 1px solid var(--input-border) !important;
 }
 
 .ratio-input:focus {
-  border-color: #0071e3 !important;
+  border-color: var(--input-focus) !important;
   box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.1) !important;
 }
 
-/* Final drive section styles */
 .final-drive-section {
   border-radius: 8px;
   margin: 8px 0;
@@ -214,9 +218,9 @@ button:hover {
   justify-content: flex-start;
   align-items: center;
   padding: 6px 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--background-blur);
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--background-blur);
   max-width: 160px;
   gap: 2px;
 }
@@ -224,7 +228,7 @@ button:hover {
 .final-drive-input label {
   margin: 0;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.08);
+  color: var(--background-blur);
   font-size: 12px;
   white-space: nowrap;
   margin-right: 2px;
@@ -237,14 +241,13 @@ button:hover {
   margin: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', monospace;
   font-size: 13px;
-  color: #f5f5f5;
+  color: var(--white);
   font-weight: 500;
   text-align: right;
-  background: transparent;
-  border: 1px solid #e5e5e5 !important;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border) !important;
 }
 
-/* Select component styles */
 select {
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -257,7 +260,7 @@ select {
 }
 
 select:focus {
-  border-color: #0071e3;
+  border-color: var(--input-focus);
   outline: none;
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
@@ -271,7 +274,6 @@ select[name="gearbox"] {
   background-size: 10px;
   background-position: right 6px center;
 }
-
 
 .form-section:first-of-type label {
   margin-top: 0;
@@ -288,7 +290,7 @@ select[name="gearbox"] {
 
 .MuiInputLabel-root {
   font-size: 13px !important;
-  color:#d3edf8 !important;
+  color: var(--secondary-color) !important;
 }
 
 .MuiOutlinedInput-root {
@@ -306,42 +308,6 @@ select[name="gearbox"] {
 #results {
   margin-top: 10px;
   font-size: 14px;
-}
-
-.logo {
-  height: 5em;
-  padding: 1em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 1.5em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 @media (max-width: 1200px) {
