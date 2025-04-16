@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getCarBrands, getGearboxesByBrand } from '../services/gearboxes';
 
 export const useGearboxCalculator = () => {
@@ -8,7 +8,6 @@ export const useGearboxCalculator = () => {
   const [selectedGearboxName, setSelectedGearboxName] = useState('');
   const [selectedGearbox, setSelectedGearbox] = useState({});
   const [chartData, setChartData] = useState({ data: [], maxSpeed: 0 });
-  const [tableData, setTableData] = useState([]); 
   const [userInput, setUserInput] = useState({
     tyreWidth: '205',
     tyreProfile: '50',
@@ -18,6 +17,7 @@ export const useGearboxCalculator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch car brands on mount
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -33,17 +33,16 @@ export const useGearboxCalculator = () => {
         setLoading(false);
       }
     };
-
     fetchBrands();
   }, []);
 
+  // Fetch gearboxes when selectedBrand changes
   useEffect(() => {
     const fetchGearboxes = async () => {
       if (!selectedBrand) {
         setGearboxes([]);
         return;
       }
-
       try {
         setLoading(true);
         const data = await getGearboxesByBrand(selectedBrand);
@@ -57,20 +56,19 @@ export const useGearboxCalculator = () => {
         setLoading(false);
       }
     };
-
     fetchGearboxes();
   }, [selectedBrand]);
 
-  const handleBrandChange = (event) => {
+  // Handlers as useCallback for better performance
+  const handleBrandChange = useCallback((event) => {
     const brand = event.target.value;
     setSelectedBrand(brand);
     setSelectedGearboxName('');
     setSelectedGearbox({});
     setChartData({ data: [], maxSpeed: 0 });
-    setTableData([]); 
-  };
+  }, []);
 
-  const handleGearboxChange = (event) => {
+  const handleGearboxChange = useCallback((event) => {
     const name = event.target.value;
     setSelectedGearboxName(name);
     const selected = gearboxes.find(g => g.name === name);
@@ -79,55 +77,48 @@ export const useGearboxCalculator = () => {
         name: selected.name,
         finalDrive: selected.finalDrive,
       };
-      
-      // Always include all gears, even if they are 0
       for (let i = 1; i <= 7; i++) {
         const gearValue = selected[`gear${i}`];
         cleanedGearbox[`gear${i}`] = gearValue !== undefined && gearValue !== null ? gearValue : 0;
       }
-      
       setSelectedGearbox(cleanedGearbox);
     } else {
       setSelectedGearbox({});
     }
     setChartData({ data: [], maxSpeed: 0 });
-    setTableData([]); 
-  };
+  }, [gearboxes]);
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = useCallback((field, value) => {
     setUserInput(prev => ({
       ...prev,
       [field]: value
     }));
-  };
+  }, []);
 
-  const handleGearRatioChange = (gearNumber, value) => {
+  const handleGearRatioChange = useCallback((gearNumber, value) => {
     if (selectedGearbox) {
       const newGearbox = { ...selectedGearbox };
-      // Allow decimal input by not immediately converting to float
       newGearbox[`gear${gearNumber}`] = value === '' ? 0 : value;
       setSelectedGearbox(newGearbox);
       setChartData({ data: [], maxSpeed: 0 });
-      setTableData([]);
     }
-  };
+  }, [selectedGearbox]);
 
-  const handleFinalDriveChange = (value) => {
+  const handleFinalDriveChange = useCallback((value) => {
     if (selectedGearbox) {
       const newGearbox = { ...selectedGearbox };
       newGearbox.finalDrive = parseFloat(value) || 0;
       setSelectedGearbox(newGearbox);
       setChartData({ data: [], maxSpeed: 0 });
-      setTableData([]);
     }
-  };
+  }, [selectedGearbox]);
 
-  const calculateSpeeds = async () => {
+  // Calculate speeds by calling backend API
+  const calculateSpeeds = useCallback(async () => {
     if (!selectedGearbox.name) {
       setError('No gearbox selected');
       return;
     }
-
     try {
       setLoading(true);
       const response = await fetch('http://localhost:8081/api/v1/gearbox/calculateSpeeds', {
@@ -137,7 +128,6 @@ export const useGearboxCalculator = () => {
         },
         body: JSON.stringify({
           maxRpm: parseInt(userInput.maxRpm),
-          // Convert to float only when sending to API
           gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
           gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
           gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
@@ -151,19 +141,13 @@ export const useGearboxCalculator = () => {
           wheelDiameter: parseInt(userInput.wheelDiameter)
         })
       });
-
       if (!response.ok) {
         throw new Error('Failed to calculate speeds');
       }
-
       const data = await response.json();
-      
-      // Transform the API response for chart and table
       const chartPoints = [];
-      const tableRows = {};
       const rpms = Object.keys(data).map(Number).sort((a, b) => a - b);
       let maxSpeed = 0;
-
       rpms.forEach(rpm => {
         const gearSpeeds = data[rpm];
         Object.entries(gearSpeeds).forEach(([gear, speed]) => {
@@ -174,22 +158,14 @@ export const useGearboxCalculator = () => {
               rpm,
               speed
             });
-
-            if (!tableRows[rpm]) {
-              tableRows[rpm] = { rpm };
-            }
-            tableRows[rpm][`gear${gearNumber}`] = speed;
-            
             maxSpeed = Math.max(maxSpeed, speed);
           }
         });
       });
-
       setChartData({
         data: chartPoints,
         maxSpeed: Math.ceil(maxSpeed)
       });
-      setTableData(Object.values(tableRows).sort((a, b) => a.rpm - b.rpm));
       setError(null);
     } catch (err) {
       setError('Failed to calculate speeds');
@@ -197,7 +173,7 @@ export const useGearboxCalculator = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedGearbox, userInput]);
 
   return {
     carBrands,
@@ -206,7 +182,6 @@ export const useGearboxCalculator = () => {
     selectedGearbox,
     selectedGearboxName,
     chartData,
-    tableData,
     userInput,
     loading,
     error,
