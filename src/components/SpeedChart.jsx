@@ -1,3 +1,4 @@
+import React, { useState, useCallback } from 'react';
 import {
   LineChart,
   Line,
@@ -9,7 +10,6 @@ import {
   Tooltip
 } from "recharts";
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 const SpeedChart = ({ chartData }) => {
   const [hoverData, setHoverData] = useState(null);
@@ -18,16 +18,13 @@ const SpeedChart = ({ chartData }) => {
     return null;
   }
 
-  // Get unique gears and speeds
   const gears = [...new Set(chartData.data.map(item => item.gear))]
     .filter(gear => gear !== undefined)
     .sort((a, b) => a - b);
 
-  // Get max RPM from the data
   const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
   const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
 
-  // Generate colors for each gear
   const colors = {
     1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
     2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
@@ -38,7 +35,7 @@ const SpeedChart = ({ chartData }) => {
     7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
   };
 
-  const handleMouseMove = (data) => {
+  const handleMouseMove = useCallback((data) => {
     if (data && data.activePayload) {
       const speed = data.activeLabel;
       const gearData = chartData.data
@@ -49,11 +46,11 @@ const SpeedChart = ({ chartData }) => {
         }, {});
       setHoverData({ speed, gearData });
     }
-  };
+  }, [chartData.data]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     setHoverData(null);
-  };
+  }, []);
 
   return (
     <div>
@@ -73,62 +70,62 @@ const SpeedChart = ({ chartData }) => {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          <CartesianGrid 
-            strokeDasharray="3 3" 
-            stroke= "rgba(255, 255, 255, 0.2)"
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="rgba(255, 255, 255, 0.2)"
             vertical={false}
           />
-          <XAxis 
+          <XAxis
             type="number"
-            dataKey="speed" 
+            dataKey="speed"
             name="Speed"
-            label={{ 
-              value: "KPH", 
-              position: "bottom", 
-              style: { 
+            label={{
+              value: "KPH",
+              position: "bottom",
+              style: {
                 fill: '#86868b',
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
                 fontSize: '13px'
-              } 
+              }
             }}
             domain={[0, 'auto']}
             tickCount={15}
             stroke="#86868b"
-            tick={{ 
+            tick={{
               fill: '#86868b',
               fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
               fontSize: '12px'
             }}
           />
-          <YAxis 
+          <YAxis
             type="number"
             dataKey="rpm"
             name="RPM"
-            label={{ 
-              value: "RPM", 
-              angle: -90, 
-              position: "insideLeft", 
-              style: { 
+            label={{
+              value: "RPM",
+              angle: -90,
+              position: "insideLeft",
+              style: {
                 fill: '#86868b',
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
                 fontSize: '13px'
-              } 
+              }
             }}
             domain={[0, roundedMaxRpm]}
             tickCount={15}
             stroke="#86868b"
-            tick={{ 
+            tick={{
               fill: '#86868b',
               fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
               fontSize: '12px'
             }}
             tickFormatter={value => value.toLocaleString()}
           />
-          <Legend 
-            verticalAlign="top" 
+          <Legend
+            verticalAlign="top"
             height={36}
             formatter={(value) => (
-              <span style={{ 
+              <span style={{
                 color: colors[parseInt(value.split(' ')[1])],
                 opacity: 1,
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
@@ -139,13 +136,13 @@ const SpeedChart = ({ chartData }) => {
               </span>
             )}
           />
-          <Tooltip 
+          <Tooltip
             cursor={{
               stroke: '#666',
               strokeWidth: 1,
               strokeDasharray: '4 4'
             }}
-            content={() => null}  // Hide tooltip content
+            content={() => null} // Hide tooltip content
           />
           {gears.map(gear => (
             <Line
@@ -175,17 +172,16 @@ const SpeedChart = ({ chartData }) => {
           gap: '20px',
           alignItems: 'center'
         }}>
-          <div style={{ 
+          <div style={{
             fontWeight: 500,
             minWidth: '120px',
             fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
             fontSize: '13px'
           }}>
-            <h3> Speed: {hoverData.speed.toFixed(0)} KPH</h3>
-           
+            <h3>Speed: {hoverData.speed.toFixed(0)} KPH</h3>
           </div>
           {gears.map(gear => (
-            <div key={gear} style={{ 
+            <div key={gear} style={{
               color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
@@ -193,8 +189,8 @@ const SpeedChart = ({ chartData }) => {
               fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
               fontSize: '13px'
             }}>
-              Gear {gear}: {hoverData.gearData[gear] ? 
-                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` : 
+              Gear {gear}: {hoverData.gearData[gear] ?
+                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
                 'N/A'
               }
             </div>
