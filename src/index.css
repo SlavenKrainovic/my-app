@@ -136,6 +136,17 @@ select {
   border-radius: 4px;
 }
 
+/* Remove number input spin buttons for all browsers */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
