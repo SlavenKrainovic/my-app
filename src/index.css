@@ -127,6 +127,16 @@ button:focus-visible {
   margin-right: auto; /* Centers the button horizontally */
 }
 
+#tyreWidth,
+#tyreProfile,
+#wheelDiameter,
+#maxRpm {
+  width: 70px !important;
+  min-width: 0 !important;
+  max-width: 70px !important;
+  box-sizing: border-box;
+}
+
 /* Custom styling for dropdown selects */
 select {
   width: 120px;
