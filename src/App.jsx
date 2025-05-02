@@ -43,20 +43,35 @@ function App() {
 
           {selectedGearbox && selectedGearbox.name && (
             <>
-              {/* Final Drive Ratio */}
+              {/* Final Drive Ratio and Max RPM side by side */}
               <div className="final-drive-section">
                 <h2>Final Drive Ratio</h2>
-                <div>
-                  <label htmlFor="finalDrive">Final Drive Ratio:</label>
-                  <input
-                    id="finalDrive"
-                    type="number"
-                    value={selectedGearbox.finalDrive || ''}
-                    onChange={(e) => handleFinalDriveChange(e.target.value)}
-                    step="0.001"
-                    min="0"
-                    max="9.999"
-                  />
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                  {/* Final Drive input */}
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label htmlFor="finalDrive">Final Drive Ratio:</label>
+                    <input
+                      id="finalDrive"
+                      step="0.001"
+                      min="0"
+                      max="9.999"
+                      type="number"
+                      value={selectedGearbox.finalDrive || ''}
+                      onChange={(e) => handleFinalDriveChange(e.target.value)}
+                    />
+                  </span>
+                  {/* Max RPM input */}
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label htmlFor="maxRpm">Max RPM:</label>
+                    <input
+                      id="maxRpm"
+                      placeholder="7500"
+                      type="number"
+                      value={userInput.maxRpm || ''}
+                      name="maxRpm"
+                      onChange={(e) => handleInputChange('maxRpm', e.target.value)}
+                    />
+                  </span>
                 </div>
               </div>
 
@@ -110,20 +125,10 @@ function App() {
                   onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
                 />
 
-                <label htmlFor="maxRpm">Max RPM:</label>
-                <input
-                  id="maxRpm"
-                  type="number"
-                  name="maxRpm"
-                  value={userInput.maxRpm}
-                  onChange={(e) => handleInputChange('maxRpm', e.target.value)}
-                  placeholder="7500"
-                />
+                <button type="button" onClick={calculateSpeeds}>Calculate</button>
+
+                {error && <div className="error-message">{error}</div>}
               </div>
-
-              <button type="button" onClick={calculateSpeeds}>Calculate</button>
-
-              {error && <div className="error-message">{error}</div>}
             </>
           )}
         </div>
