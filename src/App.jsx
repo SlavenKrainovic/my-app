@@ -79,8 +79,8 @@ function App() {
                 <h2>Gear Ratios</h2>
                 <div style={{ marginTop: '22px' }} className="ratio-grid">
                   {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => (
-                    <div key={gearNumber} className="ratio-item">
-                      <label htmlFor={`gear-${gearNumber}`}>Gear {gearNumber}:</label>
+                    <div key={gearNumber} className="ratio-item" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 4 }}>
+                      <label htmlFor={`gear-${gearNumber}`} style={{ marginBottom: 4 }}>Gear {gearNumber}:</label>
                       <input
                         id={`gear-${gearNumber}`}
                         type="number"
