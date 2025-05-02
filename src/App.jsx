@@ -43,12 +43,11 @@ function App() {
 
           {selectedGearbox && selectedGearbox.name && (
             <>
-              {/* Final Drive Ratio and Max RPM side by side */}
+              {/* Final Drive Ratio and Max RPM in a row, labels above each input */}
               <div className="final-drive-section">
-                <h2>Final Drive Ratio</h2>
-                <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                  {/* Final Drive input */}
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <h2>Gearbox configuration</h2>
+                <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-end' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                     <label htmlFor="finalDrive">Final Drive Ratio:</label>
                     <input
                       id="finalDrive"
@@ -58,10 +57,10 @@ function App() {
                       type="number"
                       value={selectedGearbox.finalDrive || ''}
                       onChange={(e) => handleFinalDriveChange(e.target.value)}
+                      style={{ width: '70px' }}
                     />
-                  </span>
-                  {/* Max RPM input */}
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
                     <label htmlFor="maxRpm">Max RPM:</label>
                     <input
                       id="maxRpm"
@@ -71,7 +70,7 @@ function App() {
                       name="maxRpm"
                       onChange={(e) => handleInputChange('maxRpm', e.target.value)}
                     />
-                  </span>
+                  </div>
                 </div>
               </div>
 
