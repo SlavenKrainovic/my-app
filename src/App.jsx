@@ -75,9 +75,9 @@ function App() {
               </div>
 
               {/* Gear Ratios */}
-              <div>
+              <div className="gear-ratios-section">
                 <h2>Gear Ratios</h2>
-                <div className="ratio-grid">
+                <div style={{ marginTop: '22px' }} className="ratio-grid">
                   {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => (
                     <div key={gearNumber} className="ratio-item">
                       <label htmlFor={`gear-${gearNumber}`}>Gear {gearNumber}:</label>

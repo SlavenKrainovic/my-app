@@ -94,7 +94,7 @@ h3 {
   font-weight: 400;
   margin-top: 6px;
   display: block;
-  color: var(--label-color);
+  color: var(--secondary-color);
   font-size: 12px;
 }
 
