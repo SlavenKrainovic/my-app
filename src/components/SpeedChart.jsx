@@ -25,15 +25,8 @@ const SpeedChart = ({ chartData }) => {
   const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
   const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
 
-  const colors = {
-    1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
-    2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
-    3: 'rgba(255, 159, 10, 0.8)',   // Apple Orange
-    4: 'rgba(255, 69, 58, 0.8)',    // Apple Red
-    5: 'rgba(191, 90, 242, 0.8)',   // Apple Purple
-    6: 'rgba(0, 199, 190, 0.8)',    // Apple Teal
-    7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
-  };
+  // Use a single color for all gears
+  const gearLineColor = 'rgba(0, 113, 227, 0.8)'; // Apple Blue
 
   const handleMouseMove = useCallback((data) => {
     if (data && data.activePayload) {
@@ -126,7 +119,7 @@ const SpeedChart = ({ chartData }) => {
             height={36}
             formatter={(value) => (
               <span style={{
-                color: colors[parseInt(value.split(' ')[1])],
+                color: gearLineColor,
                 opacity: 1,
                 fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
                 fontSize: '13px',
@@ -144,14 +137,14 @@ const SpeedChart = ({ chartData }) => {
             }}
             content={() => null} // Hide tooltip content
           />
-          {gears.map(gear => (
+          {gears.map((gear) => (
             <Line
               key={gear}
               type="monotone"
               data={chartData.data.filter(d => d.gear === gear)}
               dataKey="rpm"
               name={`Gear ${gear}`}
-              stroke={colors[gear]}
+              stroke={gearLineColor}
               strokeWidth={2}
               dot={false}
               activeDot={false}
@@ -182,7 +175,7 @@ const SpeedChart = ({ chartData }) => {
           </div>
           {gears.map(gear => (
             <div key={gear} style={{
-              color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
+              color: hoverData.gearData[gear] ? gearLineColor.replace('0.8', '1') : '#86868b',
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
               minWidth: '140px',
