@@ -176,7 +176,7 @@ const SpeedChart = ({ chartData }) => {
           </div>
           {gears.map(gear => (
             <div key={gear} style={{
-              color: 'rgba(255,255,255,0.78)', // Slightly less white
+              color: '#fff', // White color for chart data below
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
               minWidth: '140px',
