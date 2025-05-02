@@ -179,7 +179,7 @@ button:hover {
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   max-width: 280px;
-  margin: 0 auto;
+  margin: -9px;
 }
 
 .ratio-item {
