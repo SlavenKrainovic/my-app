@@ -1,95 +1,212 @@
+import React, { useState, useCallback } from 'react';
 import {
-  ComposedChart,
+  LineChart,
   Line,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
+  Tooltip
 } from "recharts";
 import PropTypes from 'prop-types';
 
-const COLORS = [
-  '#1f77b4', // blue
-  '#ff7f0e', // orange
-  '#2ca02c', // green
-  '#d62728', // red
-  '#9467bd', // purple
-  '#8c564b', // brown
-  '#e377c2', // pink
-];
-
 const SpeedChart = ({ chartData }) => {
-  if (!chartData.data || chartData.data.length === 0) {
+  const [hoverData, setHoverData] = useState(null);
+
+  if (!chartData?.data?.length) {
     return null;
   }
 
-  // Get a sample data point to see which gears are present
-  const samplePoint = chartData.data[0];
-  const availableGears = Object.keys(samplePoint)
-    .filter(key => key.startsWith('gear'))
-    .sort((a, b) => {
-      const numA = parseInt(a.replace('gear', ''));
-      const numB = parseInt(b.replace('gear', ''));
-      return numA - numB;
-    });
+  const gears = [...new Set(chartData.data.map(item => item.gear))]
+    .filter(gear => gear !== undefined)
+    .sort((a, b) => a - b);
+
+  const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
+  const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
+
+  const colors = {
+    1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
+    2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
+    3: 'rgba(255, 159, 10, 0.8)',   // Apple Orange
+    4: 'rgba(255, 69, 58, 0.8)',    // Apple Red
+    5: 'rgba(191, 90, 242, 0.8)',   // Apple Purple
+    6: 'rgba(0, 199, 190, 0.8)',    // Apple Teal
+    7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
+  };
+
+  const handleMouseMove = useCallback((data) => {
+    if (data && data.activePayload) {
+      const speed = data.activeLabel;
+      const gearData = chartData.data
+        .filter(item => Math.abs(item.speed - speed) < 0.1)
+        .reduce((acc, item) => {
+          acc[item.gear] = item.rpm;
+          return acc;
+        }, {});
+      setHoverData({ speed, gearData });
+    }
+  }, [chartData.data]);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoverData(null);
+  }, []);
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <ComposedChart
-        data={chartData.data}
-        margin={{
-          top: 20,
-          right: 30,
-          bottom: 20,
-          left: 30,
-        }}
-      >
-        <CartesianGrid stroke="#f5f5f5" />
-        <XAxis
-          dataKey="rpm"
-          type="number"
-          domain={[0, 'dataMax']}
-          label={{ value: "RPM", position: "bottom", offset: 0 }}
-        />
-        <YAxis
-          unit="km/h"
-          domain={[0, Math.ceil(chartData.maxSpeed / 10) * 10]}
-          label={{ value: "Speed (km/h)", angle: -90, position: "insideLeft" }}
-        />
-        <Tooltip 
-          formatter={(value) => value.toFixed(1) + " km/h"}
-          labelFormatter={(value) => value.toFixed(0) + " RPM"}
-        />
-        <Legend verticalAlign="top" height={36} />
-        {availableGears.map((gear, index) => (
-          <Line
-            key={gear}
-            type="monotone"
-            dataKey={gear}
-            name={`${index + 1}. Gear`}
-            stroke={COLORS[index]}
-            dot={false}
-            strokeWidth={2}
+    <div>
+      <ResponsiveContainer width="100%" height={400}>
+        <LineChart
+          data={chartData.data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 15,
+          }}
+          style={{
+            borderRadius: '20px',
+            padding: '24px'
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="rgba(255, 255, 255, 0.2)"
+            vertical={false}
           />
-        ))}
-      </ComposedChart>
-    </ResponsiveContainer>
+          <XAxis
+            type="number"
+            dataKey="speed"
+            name="Speed"
+            label={{
+              value: "KPH",
+              position: "bottom",
+              style: {
+                fill: '#86868b',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px'
+              }
+            }}
+            domain={[0, 'auto']}
+            tickCount={15}
+            stroke="#86868b"
+            tick={{
+              fill: '#86868b',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '12px'
+            }}
+          />
+          <YAxis
+            type="number"
+            dataKey="rpm"
+            name="RPM"
+            label={{
+              value: "RPM",
+              angle: -90,
+              position: "insideLeft",
+              style: {
+                fill: '#86868b',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px'
+              }
+            }}
+            domain={[0, roundedMaxRpm]}
+            tickCount={15}
+            stroke="#86868b"
+            tick={{
+              fill: '#86868b',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '12px'
+            }}
+            tickFormatter={value => value.toLocaleString()}
+          />
+          <Legend
+            verticalAlign="top"
+            height={36}
+            formatter={(value) => (
+              <span style={{
+                color: colors[parseInt(value.split(' ')[1])],
+                opacity: 1,
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px',
+                fontWeight: '500'
+              }}>
+                {value}
+              </span>
+            )}
+          />
+          <Tooltip
+            cursor={{
+              stroke: '#666',
+              strokeWidth: 1,
+              strokeDasharray: '4 4'
+            }}
+            content={() => null} // Hide tooltip content
+          />
+          {gears.map(gear => (
+            <Line
+              key={gear}
+              type="monotone"
+              data={chartData.data.filter(d => d.gear === gear)}
+              dataKey="rpm"
+              name={`Gear ${gear}`}
+              stroke={colors[gear]}
+              strokeWidth={2}
+              dot={false}
+              activeDot={false}
+              connectNulls={true}
+              isAnimationActive={false}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+      {hoverData && (
+        <div style={{
+          marginTop: '20px',
+          padding: '16px',
+          borderRadius: '12px',
+          color: '#1d1d1f',
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '20px',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            fontWeight: 500,
+            minWidth: '120px',
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+            fontSize: '13px'
+          }}>
+            <h3>Speed: {hoverData.speed.toFixed(0)} KPH</h3>
+          </div>
+          {gears.map(gear => (
+            <div key={gear} style={{
+              color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
+              opacity: hoverData.gearData[gear] ? 1 : 0.7,
+              fontWeight: 500,
+              minWidth: '140px',
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+              fontSize: '13px'
+            }}>
+              Gear {gear}: {hoverData.gearData[gear] ?
+                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
+                'N/A'
+              }
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
 SpeedChart.propTypes = {
   chartData: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape({
-      rpm: PropTypes.number.isRequired,
-      gear1: PropTypes.number,
-      gear2: PropTypes.number,
-      gear3: PropTypes.number,
-      gear4: PropTypes.number,
-      gear5: PropTypes.number,
-      gear6: PropTypes.number,
-      gear7: PropTypes.number
+      gear: PropTypes.number.isRequired,
+      speed: PropTypes.number.isRequired,
+      rpm: PropTypes.number.isRequired
     })).isRequired,
     maxSpeed: PropTypes.number.isRequired
   }).isRequired

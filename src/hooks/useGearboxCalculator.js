@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { getCarBrands, getGearboxesByBrand, calculateGearboxSpeeds } from '../services/gearboxes';
+import { useState, useEffect, useCallback } from 'react';
+import { getCarBrands, getGearboxesByBrand } from '../services/gearboxes';
 
 export const useGearboxCalculator = () => {
   const [carBrands, setCarBrands] = useState([]);
@@ -17,7 +17,7 @@ export const useGearboxCalculator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch car brands on component mount
+  // Fetch car brands on mount
   useEffect(() => {
     const fetchBrands = async () => {
       try {
@@ -33,18 +33,16 @@ export const useGearboxCalculator = () => {
         setLoading(false);
       }
     };
-
     fetchBrands();
   }, []);
 
-  // Fetch gearboxes when brand changes
+  // Fetch gearboxes when selectedBrand changes
   useEffect(() => {
     const fetchGearboxes = async () => {
       if (!selectedBrand) {
         setGearboxes([]);
         return;
       }
-
       try {
         setLoading(true);
         const data = await getGearboxesByBrand(selectedBrand);
@@ -58,123 +56,124 @@ export const useGearboxCalculator = () => {
         setLoading(false);
       }
     };
-
     fetchGearboxes();
   }, [selectedBrand]);
 
-  const handleBrandChange = (event) => {
+  // Handlers as useCallback for better performance
+  const handleBrandChange = useCallback((event) => {
     const brand = event.target.value;
     setSelectedBrand(brand);
     setSelectedGearboxName('');
     setSelectedGearbox({});
     setChartData({ data: [], maxSpeed: 0 });
-  };
+  }, []);
 
-  const handleGearboxChange = (event) => {
+  const handleGearboxChange = useCallback((event) => {
     const name = event.target.value;
     setSelectedGearboxName(name);
     const selected = gearboxes.find(g => g.name === name);
     if (selected) {
-      // Clean up the gearbox data to remove undefined/null/0 gears
       const cleanedGearbox = {
         name: selected.name,
         finalDrive: selected.finalDrive,
       };
-      
-      // Only include gears that exist and have values
       for (let i = 1; i <= 7; i++) {
         const gearValue = selected[`gear${i}`];
-        if (gearValue !== undefined && gearValue !== null && gearValue !== 0) {
-          cleanedGearbox[`gear${i}`] = gearValue;
-        }
+        cleanedGearbox[`gear${i}`] = gearValue !== undefined && gearValue !== null ? gearValue : 0;
       }
-      
       setSelectedGearbox(cleanedGearbox);
     } else {
       setSelectedGearbox({});
     }
     setChartData({ data: [], maxSpeed: 0 });
-  };
+  }, [gearboxes]);
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = useCallback((field, value) => {
     setUserInput(prev => ({
       ...prev,
       [field]: value
     }));
-  };
+  }, []);
 
-  const handleGearRatioChange = (gearNumber, value) => {
+  const handleGearRatioChange = useCallback((gearNumber, value) => {
     if (selectedGearbox) {
       const newGearbox = { ...selectedGearbox };
-      newGearbox[`gear${gearNumber}`] = parseFloat(value) || 0;
+      newGearbox[`gear${gearNumber}`] = value === '' ? 0 : value;
       setSelectedGearbox(newGearbox);
-      setChartData({ data: [], maxSpeed: 0 }); // Reset chart when ratios change
+      setChartData({ data: [], maxSpeed: 0 });
     }
-  };
+  }, [selectedGearbox]);
 
-  const calculateSpeeds = async () => {
+  const handleFinalDriveChange = useCallback((value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox.finalDrive = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 });
+    }
+  }, [selectedGearbox]);
+
+  // Calculate speeds by calling backend API
+  const calculateSpeeds = useCallback(async () => {
     if (!selectedGearbox.name) {
       setError('No gearbox selected');
       return;
     }
-
     try {
       setLoading(true);
-      setError(null);
-
-      const data = {
-        maxRpm: parseInt(userInput.maxRpm) || 0,
-        finalDrive: selectedGearbox.finalDrive,
-        tyreWidth: parseInt(userInput.tyreWidth) || 0,
-        tyreProfile: parseInt(userInput.tyreProfile) || 0,
-        wheelDiameter: parseInt(userInput.wheelDiameter) || 0,
-        gearRatio1: selectedGearbox.gear1 || 0,
-        gearRatio2: selectedGearbox.gear2 || 0,
-        gearRatio3: selectedGearbox.gear3 || 0,
-        gearRatio4: selectedGearbox.gear4 || 0,
-        gearRatio5: selectedGearbox.gear5 || 0,
-        gearRatio6: selectedGearbox.gear6 || 0,
-        gearRatio7: selectedGearbox.gear7 || 0
-      };
-
-      console.log('Sending data to calculate:', data);
-      const response = await calculateGearboxSpeeds(data);
-      console.log('Received speed data:', response);
-      
-      if (response) {
-        let maxSpeed = 0;
-        const transformedData = [];
-
-        // Get all RPM points and sort them
-        const rpmPoints = Object.keys(response).map(Number).sort((a, b) => a - b);
-
-        // Transform data for each RPM point
-        rpmPoints.forEach(rpm => {
-          const speeds = response[rpm];
-          const dataPoint = { rpm };
-
-          // Add speed for each gear if it exists
-          for (let i = 1; i <= 7; i++) {
-            const gearKey = `gear${i}`;
-            const speed = speeds[gearKey];
-            if (speed !== undefined && speed !== null && isFinite(Number(speed))) {
-              dataPoint[gearKey] = Number(speed);
-              maxSpeed = Math.max(maxSpeed, Number(speed));
-            }
-          }
-
-          transformedData.push(dataPoint);
-        });
-
-        setChartData({ data: transformedData, maxSpeed });
+      const response = await fetch('http://localhost:8081/api/v1/gearbox/calculateSpeeds', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          maxRpm: parseInt(userInput.maxRpm),
+          gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
+          gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
+          gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
+          gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
+          gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
+          gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
+          gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
+          finalDrive: selectedGearbox.finalDrive,
+          tyreWidth: parseInt(userInput.tyreWidth),
+          tyreProfile: parseInt(userInput.tyreProfile),
+          wheelDiameter: parseInt(userInput.wheelDiameter)
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to calculate speeds');
       }
+      const data = await response.json();
+      const chartPoints = [];
+      const rpms = Object.keys(data).map(Number).sort((a, b) => a - b);
+      let maxSpeed = 0;
+      rpms.forEach(rpm => {
+        const gearSpeeds = data[rpm];
+        Object.entries(gearSpeeds).forEach(([gear, speed]) => {
+          if (speed > 0) {
+            const gearNumber = parseInt(gear.replace('gear', ''));
+            chartPoints.push({
+              gear: gearNumber,
+              rpm,
+              speed
+            });
+            maxSpeed = Math.max(maxSpeed, speed);
+          }
+        });
+      });
+      setChartData({
+        data: chartPoints,
+        maxSpeed: Math.ceil(maxSpeed)
+      });
+      setError(null);
     } catch (err) {
       setError('Failed to calculate speeds');
       console.error('Error calculating speeds:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedGearbox, userInput]);
 
   return {
     carBrands,
@@ -190,6 +189,7 @@ export const useGearboxCalculator = () => {
     handleGearboxChange,
     handleInputChange,
     handleGearRatioChange,
+    handleFinalDriveChange,
     calculateSpeeds
   };
 };

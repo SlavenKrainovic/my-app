@@ -20,7 +20,8 @@ function App() {
     handleGearboxChange,
     handleInputChange,
     calculateSpeeds,
-    handleGearRatioChange
+    handleGearRatioChange,
+    handleFinalDriveChange
   } = useGearboxCalculator();
 
   return (
@@ -40,68 +41,87 @@ function App() {
             onGearboxChange={handleGearboxChange}
           />
 
-          {selectedGearbox.name && (
+          {selectedGearbox && selectedGearbox.name && (
             <>
-              {/* Gear Ratios */}
-              <div className="gearbox-info">
-                <h2>Gear Ratios</h2>
-                <div className="ratio-grid">
-                  {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => {
-                    const gearValue = selectedGearbox[`gear${gearNumber}`];
-                    if (gearValue === undefined || gearValue === null || gearValue === 0) return null;
-                    
-                    return (
-                      <div key={gearNumber} className="ratio-item">
-                        <label>Gear {gearNumber}:</label>
-                        <input
-                          type="number"
-                          value={gearValue}
-                          onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
-                          step="0.001"
-                          min="0"
-                          className="ratio-input"
-                        />
-                      </div>
-                    );
-                  })}
+              {/* Final Drive Ratio */}
+              <div className="final-drive-section">
+                <h2>Final Drive Ratio</h2>
+                <div>
+                  <label htmlFor="finalDrive">Final Drive Ratio:</label>
+                  <input
+                    id="finalDrive"
+                    type="number"
+                    value={selectedGearbox.finalDrive || ''}
+                    onChange={(e) => handleFinalDriveChange(e.target.value)}
+                    step="0.001"
+                    min="0"
+                    max="9.999"
+                  />
                 </div>
               </div>
 
-              <h2>Wheel Configuration</h2>
-              <label>Tyre Width:</label>
-              <input 
-                type="number"
-                name="tyreWidth"
-                value={userInput.tyreWidth || ''}
-                onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
-              />
+              {/* Gear Ratios */}
+              <div>
+                <h2>Gear Ratios</h2>
+                <div className="ratio-grid">
+                  {[1, 2, 3, 4, 5, 6, 7].map((gearNumber) => (
+                    <div key={gearNumber} className="ratio-item">
+                      <label htmlFor={`gear-${gearNumber}`}>Gear {gearNumber}:</label>
+                      <input
+                        id={`gear-${gearNumber}`}
+                        type="number"
+                        value={selectedGearbox[`gear${gearNumber}`] || ''}
+                        onChange={(e) => handleGearRatioChange(gearNumber, e.target.value)}
+                        step="0.001"
+                        min="0"
+                        max="9.999"
+                        className="ratio-input"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="wheel-config">
+                <h2>Wheel Configuration</h2>
+                <label htmlFor="tyreWidth">Tyre Width:</label>
+                <input
+                  id="tyreWidth"
+                  type="number"
+                  name="tyreWidth"
+                  value={userInput.tyreWidth || ''}
+                  onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
+                />
 
-              <label>Tyre Profile:</label>
-              <input 
-                type="number"
-                name="tyreProfile"
-                value={userInput.tyreProfile || ''}
-                onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
-              />
+                <label htmlFor="tyreProfile">Tyre Profile:</label>
+                <input
+                  id="tyreProfile"
+                  type="number"
+                  name="tyreProfile"
+                  value={userInput.tyreProfile || ''}
+                  onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
+                />
 
-              <label>Wheel Diameter (inch):</label>
-              <input 
-                type="number"
-                name="wheelDiameter"
-                value={userInput.wheelDiameter || ''}
-                onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
-              />
+                <label htmlFor="wheelDiameter">Wheel Diameter (inch):</label>
+                <input
+                  id="wheelDiameter"
+                  type="number"
+                  name="wheelDiameter"
+                  value={userInput.wheelDiameter || ''}
+                  onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
+                />
 
-              <label>Max RPM:</label>
-              <input 
-                type="number"
-                name="maxRpm"
-                value={userInput.maxRpm}
-                onChange={(e) => handleInputChange('maxRpm', e.target.value)}
-                placeholder="7500"
-              />
+                <label htmlFor="maxRpm">Max RPM:</label>
+                <input
+                  id="maxRpm"
+                  type="number"
+                  name="maxRpm"
+                  value={userInput.maxRpm}
+                  onChange={(e) => handleInputChange('maxRpm', e.target.value)}
+                  placeholder="7500"
+                />
+              </div>
 
-              <button onClick={calculateSpeeds}>Calculate</button>
+              <button type="button" onClick={calculateSpeeds}>Calculate</button>
 
               {error && <div className="error-message">{error}</div>}
             </>
