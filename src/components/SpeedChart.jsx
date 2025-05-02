@@ -163,14 +163,9 @@ const SpeedChart = ({ chartData }) => {
       </ResponsiveContainer>
       {hoverData && (
         <div style={{
-          marginTop: '20px',
-          padding: '16px',
-          borderRadius: '12px',
-          color: '#1d1d1f',
           display: 'flex',
-          flexWrap: 'wrap',
-          gap: '20px',
-          alignItems: 'center'
+          flexDirection: 'column',
+          gap: '8px',
         }}>
           <div style={{
             fontWeight: 500,
@@ -180,21 +175,32 @@ const SpeedChart = ({ chartData }) => {
           }}>
             <h3>Speed: {hoverData.speed.toFixed(0)} KPH</h3>
           </div>
-          {gears.map(gear => (
-            <div key={gear} style={{
-              color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
-              opacity: hoverData.gearData[gear] ? 1 : 0.7,
-              fontWeight: 500,
-              minWidth: '140px',
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
-              fontSize: '13px'
-            }}>
-              Gear {gear}: {hoverData.gearData[gear] ?
-                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
-                'N/A'
-              }
-            </div>
-          ))}
+          <div style={{
+            display: 'block',
+            overflowX: 'auto',
+            whiteSpace: 'nowrap',
+            width: '100%',
+            paddingBottom: '2px'
+          }}>
+            {gears.map(gear => (
+              <div key={gear} style={{
+                display: 'inline-block',
+                color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
+                opacity: hoverData.gearData[gear] ? 1 : 0.7,
+                fontWeight: 500,
+                minWidth: '90px',
+                marginRight: '10px',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px',
+                verticalAlign: 'top'
+              }}>
+                Gear {gear}: {hoverData.gearData[gear] ?
+                  `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
+                  'N/A'
+                }
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
