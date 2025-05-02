@@ -97,24 +97,28 @@ function App() {
               </div>
               <div className="wheel-config">
                 <h2>Wheel Configuration</h2>
-                <label htmlFor="tyreWidth">Tyre Width:</label>
-                <input
-                  id="tyreWidth"
-                  type="number"
-                  name="tyreWidth"
-                  value={userInput.tyreWidth || ''}
-                  onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
-                />
-
-                <label htmlFor="tyreProfile">Tyre Profile:</label>
-                <input
-                  id="tyreProfile"
-                  type="number"
-                  name="tyreProfile"
-                  value={userInput.tyreProfile || ''}
-                  onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
-                />
-
+                <div style={{ display: 'flex', gap: '28px', alignItems: 'flex-end' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label htmlFor="tyreWidth">Tyre Width:</label>
+                    <input
+                      id="tyreWidth"
+                      type="number"
+                      name="tyreWidth"
+                      value={userInput.tyreWidth || ''}
+                      onChange={(e) => handleInputChange('tyreWidth', e.target.value)}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label htmlFor="tyreProfile">Tyre Profile:</label>
+                    <input
+                      id="tyreProfile"
+                      type="number"
+                      name="tyreProfile"
+                      value={userInput.tyreProfile || ''}
+                      onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
+                    />
+                  </div>
+                </div>
                 <label htmlFor="wheelDiameter">Wheel Diameter (inch):</label>
                 <input
                   id="wheelDiameter"
@@ -123,7 +127,6 @@ function App() {
                   value={userInput.wheelDiameter || ''}
                   onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
                 />
-
                 <button type="button" onClick={calculateSpeeds}>Calculate</button>
 
                 {error && <div className="error-message">{error}</div>}
