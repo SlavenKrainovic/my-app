@@ -25,8 +25,9 @@ const SpeedChart = ({ chartData }) => {
   const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
   const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
 
-  // Use a single color for all gears
-  const gearLineColor = 'rgba(0, 113, 227, 0.8)'; // Apple Blue
+  // Use Apple System Gray for all gears
+  const gearLineColor = 'rgba(142,142,147,0.82)'; // Apple System Gray 5 (active)
+  const gearLineColorInactive = 'rgba(102, 101, 101, 0.45)'; // Apple System Gray 6 (inactive)
 
   const handleMouseMove = useCallback((data) => {
     if (data && data.activePayload) {
@@ -175,7 +176,7 @@ const SpeedChart = ({ chartData }) => {
           </div>
           {gears.map(gear => (
             <div key={gear} style={{
-              color: hoverData.gearData[gear] ? gearLineColor.replace('0.8', '1') : '#86868b',
+              color: '#fff', // White color for chart data below
               opacity: hoverData.gearData[gear] ? 1 : 0.7,
               fontWeight: 500,
               minWidth: '140px',
