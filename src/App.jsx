@@ -117,20 +117,19 @@ function App() {
                   {[1,2,3,4].map((gear, idx) => (
                     <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
-                      <input
+                      <select
                         id={`pattern${gear}`}
-                        type="number"
-                        min="1"
-                        max="2"
-                        step="1"
                         value={
                           (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
-                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || ''
-                            : ''
+                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || '1'
+                            : '1'
                         }
                         onChange={e => handlePatternChange(gear, e.target.value)}
-                        style={{ width: '40px', textAlign: 'center' }}
-                      />
+                        style={{ width: '48px', textAlign: 'center' }}
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                      </select>
                     </div>
                   ))}
                 </div>
@@ -138,20 +137,19 @@ function App() {
                   {[5,6,7].map((gear, idx) => (
                     <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
-                      <input
+                      <select
                         id={`pattern${gear}`}
-                        type="number"
-                        min="1"
-                        max="2"
-                        step="1"
                         value={
                           (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
-                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || ''
-                            : ''
+                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || '1'
+                            : '1'
                         }
                         onChange={e => handlePatternChange(gear, e.target.value)}
-                        style={{ width: '40px', textAlign: 'center' }}
-                      />
+                        style={{ width: '48px', textAlign: 'center' }}
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                      </select>
                     </div>
                   ))}
                 </div>
