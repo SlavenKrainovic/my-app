@@ -22,13 +22,8 @@ const GearboxSelect = ({ gearboxes, selectedGearbox, onGearboxChange }) => (
         '& .MuiSvgIcon-root': {
           color: 'rgba(255, 255, 255, 0.08)'
         },
-        '&:hover': {
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(255, 255, 255, 0.15)'
-          },
-          '& .MuiSvgIcon-root': {
-            color: 'rgba(255, 255, 255, 0.15)'
-          }
+        '& .MuiSelect-icon': {
+          color: 'rgba(255, 255, 255, 0.15)'
         }
       }}
       MenuProps={{
@@ -63,6 +58,10 @@ GearboxSelect.propTypes = {
   ).isRequired,
   selectedGearbox: PropTypes.string,
   onGearboxChange: PropTypes.func.isRequired,
+};
+
+GearboxSelect.defaultProps = {
+  selectedGearbox: '',
 };
 
 export default GearboxSelect;

@@ -22,13 +22,8 @@ const CarBrandSelect = ({ brands, selectedBrand, onBrandChange }) => (
         '& .MuiSvgIcon-root': {
           color: 'rgba(255, 255, 255, 0.08)'
         },
-        '&:hover': {
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(255, 255, 255, 0.15)'
-          },
-          '& .MuiSvgIcon-root': {
-            color: 'rgba(255, 255, 255, 0.15)'
-          }
+        '& .MuiSelect-icon': {
+          color: 'rgba(255, 255, 255, 0.15)'
         }
       }}
       MenuProps={{
@@ -59,6 +54,10 @@ CarBrandSelect.propTypes = {
   brands: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedBrand: PropTypes.string,
   onBrandChange: PropTypes.func.isRequired,
+};
+
+CarBrandSelect.defaultProps = {
+  selectedBrand: '',
 };
 
 export default CarBrandSelect;

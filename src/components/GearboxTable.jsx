@@ -1,7 +1,7 @@
 // Cleaned up for readability, accessibility, and maintainability
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
+import NumberInput from './NumberInput';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 
@@ -49,23 +49,24 @@ const GearboxTable = ({
         {gearsWithFinalDrive.map((g, idx) => (
           <li key={g.gear} className="ratio-item">
             <span>Gear {g.gear}:</span>
-            <TextField
-              type="number"
-              size="small"
+            <NumberInput
               value={g.ratio}
               onChange={e => onInputChange(`gear${g.gear}`, e.target.value)}
-              inputProps={{ min: 0, step: 0.001 }}
-              style={{ width: 70, marginLeft: 8, marginRight: 8 }}
+              min={0}
+              step={0.001}
+              sx={{ width: 70, ml: 1, mr: 1 }}
+              inputProps={{}}
             />
             {/* Editable box for pattern for this gear */}
-            <TextField
-              type="number"
-              size="small"
+            <NumberInput
               value={patternArr[idx] || 1}
               onChange={e => onInputChange(`pattern${g.gear}`, e.target.value)}
-              inputProps={{ min: 1, max: 2, step: 1 }}
-              style={{ width: 50, marginLeft: 8 }}
+              min={1}
+              max={2}
+              step={1}
+              sx={{ width: 50, ml: 1 }}
               label="Pattern"
+              inputProps={{}}
             />
             {typeof g.finalDrive === 'number' && (
               <span> (<strong>Final Drive:</strong> {g.finalDrive.toFixed(3)})</span>
@@ -75,70 +76,62 @@ const GearboxTable = ({
         {/* Show both final drives for reference as value boxes */}
         <li style={{marginTop: '10px'}}>
           <strong>Final Drive 1:</strong>
-          <TextField
-            type="number"
-            variant="outlined"
-            size="small"
+          <NumberInput
             value={selectedGearbox.finalDrive ?? ''}
-            InputProps={{ readOnly: true }}
+            readOnly
             sx={{ ml: 1, width: 100 }}
+            inputProps={{}}
           />
         </li>
         {selectedGearbox.finalDrive2 && (
           <li style={{marginTop: '5px'}}>
             <strong>Final Drive 2:</strong>
-            <TextField
-              type="number"
-              variant="outlined"
-              size="small"
+            <NumberInput
               value={selectedGearbox.finalDrive2 ?? ''}
-              InputProps={{ readOnly: true }}
+              readOnly
               sx={{ ml: 1, width: 100 }}
+              inputProps={{}}
             />
           </li>
         )}
         <li>
           <strong>Tyre Width:</strong>
-          <TextField
-            type="number"
-            variant="outlined"
-            size="small"
+          <NumberInput
             value={userInput.tyreWidth}
-            onChange={(e) => onInputChange('tyreWidth', e.target.value)}
-            inputProps={{ min: 0, 'aria-label': 'Tyre Width' }}
+            onChange={e => onInputChange('tyreWidth', e.target.value)}
+            min={0}
+            label="Tyre Width"
+            inputProps={{ 'aria-label': 'Tyre Width' }}
           />
         </li>
         <li>
           <strong>Tyre Profile:</strong>
-          <TextField
-            type="number"
-            variant="outlined"
-            size="small"
+          <NumberInput
             value={userInput.tyreProfile}
-            onChange={(e) => onInputChange('tyreProfile', e.target.value)}
-            inputProps={{ min: 0, 'aria-label': 'Tyre Profile' }}
+            onChange={e => onInputChange('tyreProfile', e.target.value)}
+            min={0}
+            label="Tyre Profile"
+            inputProps={{ 'aria-label': 'Tyre Profile' }}
           />
         </li>
         <li>
           <strong>Wheel Diameter:</strong>
-          <TextField
-            type="number"
-            variant="outlined"
-            size="small"
+          <NumberInput
             value={userInput.wheelDiameter}
-            onChange={(e) => onInputChange('wheelDiameter', e.target.value)}
-            inputProps={{ min: 0, 'aria-label': 'Wheel Diameter' }}
+            onChange={e => onInputChange('wheelDiameter', e.target.value)}
+            min={0}
+            label="Wheel Diameter"
+            inputProps={{ 'aria-label': 'Wheel Diameter' }}
           />
         </li>
         <li>
           <strong>Max RPM:</strong>
-          <TextField
-            type="number"
-            variant="outlined"
-            size="small"
+          <NumberInput
             value={userInput.maxRpm}
-            onChange={(e) => onInputChange('maxRpm', e.target.value)}
-            inputProps={{ min: 0, 'aria-label': 'Max RPM' }}
+            onChange={e => onInputChange('maxRpm', e.target.value)}
+            min={0}
+            label="Max RPM"
+            inputProps={{ 'aria-label': 'Max RPM' }}
           />
         </li>
         <li>
@@ -180,6 +173,31 @@ GearboxTable.propTypes = {
   }).isRequired,
   onInputChange: PropTypes.func.isRequired,
   onCalculate: PropTypes.func.isRequired,
+};
+
+GearboxTable.defaultProps = {
+  selectedGearbox: {
+    name: '',
+    gear1: 0,
+    gear2: 0,
+    gear3: 0,
+    gear4: 0,
+    gear5: 0,
+    gear6: 0,
+    gear7: 0,
+    gears: [],
+    finalDrive: 0,
+    finalDrive2: 0,
+    finalDrivePattern: ''
+  },
+  userInput: {
+    tyreWidth: '',
+    tyreProfile: '',
+    wheelDiameter: '',
+    maxRpm: ''
+  },
+  onInputChange: () => {},
+  onCalculate: () => {},
 };
 
 export default GearboxTable;

@@ -218,4 +218,11 @@ SpeedChart.propTypes = {
   }).isRequired
 };
 
+SpeedChart.defaultProps = {
+  chartData: {
+    data: [],
+    maxSpeed: 0
+  }
+};
+
 export default SpeedChart;
