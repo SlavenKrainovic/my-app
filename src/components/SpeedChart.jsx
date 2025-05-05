@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -35,7 +35,7 @@ const SpeedChart = ({ chartData }) => {
     7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
   };
 
-  const handleMouseMove = useCallback((data) => {
+  const handleMouseMove = (data) => {
     if (data && data.activePayload) {
       const speed = data.activeLabel;
       const gearData = chartData.data
@@ -46,11 +46,11 @@ const SpeedChart = ({ chartData }) => {
         }, {});
       setHoverData({ speed, gearData });
     }
-  }, [chartData.data]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     setHoverData(null);
-  }, []);
+  };
 
   return (
     <div>

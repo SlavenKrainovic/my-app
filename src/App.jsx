@@ -1,5 +1,4 @@
 import './App.css';
-import { useState } from 'react';
 import SpeedChart from './components/SpeedChart';
 import CarBrandSelect from './components/CarBrandSelect';
 import GearboxSelect from './components/GearboxSelect';
