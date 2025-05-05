@@ -76,6 +76,8 @@ export const useGearboxCalculator = () => {
       const cleanedGearbox = {
         name: selected.name,
         finalDrive: selected.finalDrive,
+        finalDrive2: selected.finalDrive2,
+        finalDrivePattern: selected.finalDrivePattern || '1,1,1,1,1,1,1',
       };
       for (let i = 1; i <= 7; i++) {
         const gearValue = selected[`gear${i}`];
@@ -113,6 +115,27 @@ export const useGearboxCalculator = () => {
     }
   }, [selectedGearbox]);
 
+  const handleFinalDrive2Change = useCallback((value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox.finalDrive2 = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 });
+    }
+  }, [selectedGearbox]);
+
+  const handlePatternChange = useCallback((gearNumber, value) => {
+    if (selectedGearbox) {
+      const patternArr = selectedGearbox.finalDrivePattern
+        ? selectedGearbox.finalDrivePattern.split(',')
+        : ['1','1','1','1','1','1','1'];
+      patternArr[gearNumber - 1] = value;
+      const newPattern = patternArr.join(',');
+      setSelectedGearbox({ ...selectedGearbox, finalDrivePattern: newPattern });
+      setChartData({ data: [], maxSpeed: 0 });
+    }
+  }, [selectedGearbox]);
+
   // Calculate speeds by calling backend API
   const calculateSpeeds = useCallback(async () => {
     if (!selectedGearbox.name) {
@@ -135,7 +158,9 @@ export const useGearboxCalculator = () => {
           gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
           gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
           gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
-          finalDrive: selectedGearbox.finalDrive,
+          finalDrive: parseFloat(selectedGearbox.finalDrive) || 0,
+          finalDrivePattern: selectedGearbox.finalDrivePattern || '1,1,1,1,1,1,1',
+          finalDrive2: parseFloat(selectedGearbox.finalDrive2) || 0,
           tyreWidth: parseInt(userInput.tyreWidth),
           tyreProfile: parseInt(userInput.tyreProfile),
           wheelDiameter: parseInt(userInput.wheelDiameter)
@@ -190,6 +215,8 @@ export const useGearboxCalculator = () => {
     handleInputChange,
     handleGearRatioChange,
     handleFinalDriveChange,
+    handleFinalDrive2Change,
+    handlePatternChange,
     calculateSpeeds
   };
 };

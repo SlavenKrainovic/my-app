@@ -21,7 +21,9 @@ function App() {
     handleInputChange,
     calculateSpeeds,
     handleGearRatioChange,
-    handleFinalDriveChange
+    handleFinalDriveChange,
+    handleFinalDrive2Change,
+    handlePatternChange
   } = useGearboxCalculator();
 
   return (
@@ -48,7 +50,7 @@ function App() {
                 <h2>Gearbox configuration</h2>
                 <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-end' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-                    <label htmlFor="finalDrive">Final Drive Ratio:</label>
+                    <label htmlFor="finalDrive">Final Drive 1:</label>
                     <input
                       id="finalDrive"
                       step="0.001"
@@ -57,6 +59,20 @@ function App() {
                       type="number"
                       value={selectedGearbox.finalDrive || ''}
                       onChange={(e) => handleFinalDriveChange(e.target.value)}
+                      style={{ width: '70px' }}
+                    />
+                  </div>
+                  {/* Final Drive 2 Box - always show, for UI/UX consistency */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+                    <label htmlFor="finalDrive2">Final Drive 2:</label>
+                    <input
+                      id="finalDrive2"
+                      step="0.001"
+                      min="0"
+                      max="9.999"
+                      type="number"
+                      value={selectedGearbox.finalDrive2 || ''}
+                      onChange={(e) => handleFinalDrive2Change(e.target.value)}
                       style={{ width: '70px' }}
                     />
                   </div>
@@ -90,6 +106,51 @@ function App() {
                         min="0"
                         max="9.999"
                         className="ratio-input"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="pattern-section" style={{ marginTop: '16px' }}>
+                <h3>Gear Pattern</h3>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                  {[1,2,3,4].map((gear, idx) => (
+                    <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
+                      <input
+                        id={`pattern${gear}`}
+                        type="number"
+                        min="1"
+                        max="2"
+                        step="1"
+                        value={
+                          (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
+                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || ''
+                            : ''
+                        }
+                        onChange={e => handlePatternChange(gear, e.target.value)}
+                        style={{ width: '40px', textAlign: 'center' }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  {[5,6,7].map((gear, idx) => (
+                    <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                      <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
+                      <input
+                        id={`pattern${gear}`}
+                        type="number"
+                        min="1"
+                        max="2"
+                        step="1"
+                        value={
+                          (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
+                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || ''
+                            : ''
+                        }
+                        onChange={e => handlePatternChange(gear, e.target.value)}
+                        style={{ width: '40px', textAlign: 'center' }}
                       />
                     </div>
                   ))}

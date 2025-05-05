@@ -11,18 +11,92 @@ const GearboxTable = ({
   onInputChange, 
   onCalculate 
 }) => {
+  // --- Dual Final Drive Logic ---
+  // Parse finalDrivePattern if present, fallback to all 1s if not
+  const patternArr = selectedGearbox.finalDrivePattern
+    ? selectedGearbox.finalDrivePattern.split(',').map(Number)
+    : [1,1,1,1,1,1,1];
+
+  // Gather gears from either array or legacy fields
+  let gears = [];
+  if (Array.isArray(selectedGearbox.gears)) {
+    gears = selectedGearbox.gears.filter(g => g.ratio && g.ratio !== 0);
+  } else {
+    // fallback: build gears from gear1-gear7
+    for (let i = 1; i <= 7; i++) {
+      const ratio = selectedGearbox[`gear${i}`];
+      if (ratio && ratio !== 0) gears.push({ gear: i, ratio });
+    }
+  }
+
+  // Map each gear to its correct final drive
+  const gearsWithFinalDrive = gears.map((g, idx) => {
+    const pattern = patternArr[idx] || 1;
+    const finalDriveUsed = pattern === 2 && selectedGearbox.finalDrive2
+      ? selectedGearbox.finalDrive2
+      : selectedGearbox.finalDrive;
+    return {
+      ...g,
+      finalDrive: finalDriveUsed
+    };
+  });
+
   return (
     <TableContainer component={Paper} sx={{ mb: 4 }}>
       <ul className="gearbox-info-list">
         <li><strong>Gearbox Name:</strong> {selectedGearbox.name || '-'}</li>
-        <li><strong>First Gear:</strong> {selectedGearbox.gear1?.toFixed(3) || '-'}</li>
-        <li><strong>Second Gear:</strong> {selectedGearbox.gear2?.toFixed(3) || '-'}</li>
-        <li><strong>Third Gear:</strong> {selectedGearbox.gear3?.toFixed(3) || '-'}</li>
-        <li><strong>Fourth Gear:</strong> {selectedGearbox.gear4?.toFixed(3) || '-'}</li>
-        <li><strong>Fifth Gear:</strong> {selectedGearbox.gear5?.toFixed(3) || '-'}</li>
-        <li><strong>Sixth Gear:</strong> {selectedGearbox.gear6?.toFixed(3) || '-'}</li>
-        <li><strong>Seventh Gear:</strong> {selectedGearbox.gear7?.toFixed(3) || '-'}</li>
-        <li><strong>Final Drive:</strong> {selectedGearbox.finalDrive?.toFixed(3) || '-'}</li>
+        {/* Show per-gear ratios and final drive */}
+        {gearsWithFinalDrive.map((g, idx) => (
+          <li key={g.gear} className="ratio-item">
+            <span>Gear {g.gear}:</span>
+            <TextField
+              type="number"
+              size="small"
+              value={g.ratio}
+              onChange={e => onInputChange(`gear${g.gear}`, e.target.value)}
+              inputProps={{ min: 0, step: 0.001 }}
+              style={{ width: 70, marginLeft: 8, marginRight: 8 }}
+            />
+            {/* Editable box for pattern for this gear */}
+            <TextField
+              type="number"
+              size="small"
+              value={patternArr[idx] || 1}
+              onChange={e => onInputChange(`pattern${g.gear}`, e.target.value)}
+              inputProps={{ min: 1, max: 2, step: 1 }}
+              style={{ width: 50, marginLeft: 8 }}
+              label="Pattern"
+            />
+            {typeof g.finalDrive === 'number' && (
+              <span> (<strong>Final Drive:</strong> {g.finalDrive.toFixed(3)})</span>
+            )}
+          </li>
+        ))}
+        {/* Show both final drives for reference as value boxes */}
+        <li style={{marginTop: '10px'}}>
+          <strong>Final Drive 1:</strong>
+          <TextField
+            type="number"
+            variant="outlined"
+            size="small"
+            value={selectedGearbox.finalDrive ?? ''}
+            InputProps={{ readOnly: true }}
+            sx={{ ml: 1, width: 100 }}
+          />
+        </li>
+        {selectedGearbox.finalDrive2 && (
+          <li style={{marginTop: '5px'}}>
+            <strong>Final Drive 2:</strong>
+            <TextField
+              type="number"
+              variant="outlined"
+              size="small"
+              value={selectedGearbox.finalDrive2 ?? ''}
+              InputProps={{ readOnly: true }}
+              sx={{ ml: 1, width: 100 }}
+            />
+          </li>
+        )}
         <li>
           <strong>Tyre Width:</strong>
           <TextField
@@ -93,7 +167,10 @@ GearboxTable.propTypes = {
     gear5: PropTypes.number,
     gear6: PropTypes.number,
     gear7: PropTypes.number,
+    gears: PropTypes.array,
     finalDrive: PropTypes.number,
+    finalDrive2: PropTypes.number,
+    finalDrivePattern: PropTypes.string,
   }).isRequired,
   userInput: PropTypes.shape({
     tyreWidth: PropTypes.string.isRequired,
