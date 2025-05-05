@@ -8,6 +8,7 @@ A modern, interactive web application for calculating and visualizing vehicle sp
 - Configure wheel and tire parameters
 - Visualize speed vs RPM for each gear with a modern chart
 - Responsive, accessible, and clean UI
+- Choose which final drive (1 or 2) is used for each gear using the "Final Drive Switch" section.
 
 ## Getting Started
 
@@ -62,6 +63,10 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ## License
 MIT (or specify your license here)
+
+### Final Drive Switch
+
+In the "Final Drive Switch" section, you can select for each gear whether to use the primary or secondary final drive. This option is available only if a second final drive is defined for the selected gearbox.
 
 ---
 Made with ❤️ using React, Vite, and MUI.

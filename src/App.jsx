@@ -113,7 +113,7 @@ function App() {
               </div>
               <div className="pattern-section">
                 <div className="chip-label">
-                  <h3>Gear Pattern</h3>
+                  <h2>Final Drive Switch</h2>
                 </div>
                 <div className="chip-row">
                   {[1,2,3,4,5,6,7].map((gear) => {

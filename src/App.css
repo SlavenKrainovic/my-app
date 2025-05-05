@@ -380,12 +380,17 @@ select[name="gearbox"] {
   margin-bottom: 4px;
 }
 
-.pattern-section h3 {
+.pattern-section h2 {
   margin: 0;
-  font-size: 15px;
-  color: #e0e0e0;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--secondary-color);
+  margin: 16px 0 8px;
+  letter-spacing: -0.2px;
+}
+
+.final-drive-switch-section h3 {
+  /* Ovaj stil više nije potreban jer je sada h2 */
 }
 
 @media (max-width: 1200px) {
