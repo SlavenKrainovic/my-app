@@ -161,15 +161,17 @@ function App() {
                       onChange={(e) => handleInputChange('tyreProfile', e.target.value)}
                     />
                   </div>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label htmlFor="wheelDiameter">Wheel Dia (inch):</label>
+                    <input
+                      id="wheelDiameter"
+                      type="number"
+                      name="wheelDiameter"
+                      value={userInput.wheelDiameter || ''}
+                      onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
+                    />
+                  </div>
                 </div>
-                <label htmlFor="wheelDiameter">Wheel Diameter (inch):</label>
-                <input
-                  id="wheelDiameter"
-                  type="number"
-                  name="wheelDiameter"
-                  value={userInput.wheelDiameter || ''}
-                  onChange={(e) => handleInputChange('wheelDiameter', e.target.value)}
-                />
                 <button type="button" onClick={calculateSpeeds}>Calculate</button>
 
                 {error && <div className="error-message">{error}</div>}

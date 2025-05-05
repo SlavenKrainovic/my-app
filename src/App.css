@@ -158,6 +158,7 @@ button:hover {
 
 .wheel-config label {
   color: var(--secondary-color);
+  white-space: nowrap;
 }
 
 .gearbox-info {
