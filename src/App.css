@@ -389,9 +389,6 @@ select[name="gearbox"] {
   letter-spacing: -0.2px;
 }
 
-.final-drive-switch-section h3 {
-  /* Ovaj stil više nije potreban jer je sada h2 */
-}
 
 @media (max-width: 1200px) {
   .container {
