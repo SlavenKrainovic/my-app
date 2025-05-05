@@ -144,27 +144,34 @@ export const useGearboxCalculator = () => {
     }
     try {
       setLoading(true);
+      // Prepare finalDrive2 and pattern
+      const hasFinalDrive2 = !!selectedGearbox.finalDrive2 && selectedGearbox.finalDrive2 !== '' && selectedGearbox.finalDrive2 !== 0;
+      let finalDrivePattern = selectedGearbox.finalDrivePattern || '1,1,1,1,1,1,1';
+      if (!hasFinalDrive2) {
+        finalDrivePattern = '1,1,1,1,1,1,1';
+      }
+      const payload = {
+        maxRpm: parseInt(userInput.maxRpm),
+        gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
+        gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
+        gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
+        gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
+        gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
+        gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
+        gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
+        finalDrive: parseFloat(selectedGearbox.finalDrive) || 0,
+        finalDrivePattern,
+        finalDrive2: hasFinalDrive2 ? parseFloat(selectedGearbox.finalDrive2) : null,
+        tyreWidth: parseInt(userInput.tyreWidth),
+        tyreProfile: parseInt(userInput.tyreProfile),
+        wheelDiameter: parseInt(userInput.wheelDiameter)
+      };
       const response = await fetch('http://localhost:8081/api/v1/gearbox/calculateSpeeds', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          maxRpm: parseInt(userInput.maxRpm),
-          gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
-          gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
-          gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
-          gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
-          gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
-          gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
-          gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
-          finalDrive: parseFloat(selectedGearbox.finalDrive) || 0,
-          finalDrivePattern: selectedGearbox.finalDrivePattern || '1,1,1,1,1,1,1',
-          finalDrive2: parseFloat(selectedGearbox.finalDrive2) || 0,
-          tyreWidth: parseInt(userInput.tyreWidth),
-          tyreProfile: parseInt(userInput.tyreProfile),
-          wheelDiameter: parseInt(userInput.wheelDiameter)
-        })
+        body: JSON.stringify(payload)
       });
       if (!response.ok) {
         throw new Error('Failed to calculate speeds');

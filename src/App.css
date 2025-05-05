@@ -310,6 +310,84 @@ select[name="gearbox"] {
   font-size: 14px;
 }
 
+.chip-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  justify-content: flex-start;
+}
+
+.chip-btn {
+  border: none;
+  outline: none;
+  background: #23272f;
+  color: #b0b0b0;
+  border-radius: 16px;
+  padding: 0 14px;
+  height: 32px;
+  min-width: 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #333;
+}
+
+.chip-btn-disabled {
+  background: #23272f !important;
+  color: #555 !important;
+  cursor: not-allowed !important;
+  border-color: #444 !important;
+  box-shadow: none !important;
+  opacity: 0.68;
+}
+
+.chip-btn-active {
+  background: linear-gradient(90deg, #0071e3 70%, #2499f7 100%);
+  color: #fff;
+  border-color: #0071e3;
+  box-shadow: 0 2px 8px rgba(36,153,247,0.12);
+}
+
+.chip-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: #b0b0b0;
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+.chip-legend .chip-btn {
+  pointer-events: none;
+  margin-right: 4px;
+  margin-left: 6px;
+  height: 24px;
+  min-width: 24px;
+  font-size: 13px;
+  padding: 0 8px;
+}
+
+.chip-label {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.pattern-section h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #e0e0e0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
 @media (max-width: 1200px) {
   .container {
     grid-template-columns: 1fr;

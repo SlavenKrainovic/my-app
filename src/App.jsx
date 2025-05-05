@@ -111,47 +111,32 @@ function App() {
                   ))}
                 </div>
               </div>
-              <div className="pattern-section" style={{ marginTop: '16px' }}>
-                <h3>Gear Pattern</h3>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                  {[1,2,3,4].map((gear, idx) => (
-                    <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
-                      <select
-                        id={`pattern${gear}`}
-                        value={
-                          (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
-                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || '1'
-                            : '1'
-                        }
-                        onChange={e => handlePatternChange(gear, e.target.value)}
-                        style={{ width: '48px', textAlign: 'center' }}
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                      </select>
-                    </div>
-                  ))}
+              <div className="pattern-section">
+                <div className="chip-label">
+                  <h3>Gear Pattern</h3>
                 </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  {[5,6,7].map((gear, idx) => (
-                    <div key={gear} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <label htmlFor={`pattern${gear}`}>{`Gear ${gear}`}</label>
-                      <select
-                        id={`pattern${gear}`}
-                        value={
-                          (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
-                            ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || '1'
-                            : '1'
-                        }
-                        onChange={e => handlePatternChange(gear, e.target.value)}
-                        style={{ width: '48px', textAlign: 'center' }}
+                <div className="chip-row">
+                  {[1,2,3,4,5,6,7].map((gear) => {
+                    const hasFinalDrive2 = !!selectedGearbox.finalDrive2 && selectedGearbox.finalDrive2 !== '' && selectedGearbox.finalDrive2 !== 0;
+                    let selected = (selectedGearbox.finalDrivePattern && selectedGearbox.finalDrivePattern.split(',').length >= gear)
+                      ? selectedGearbox.finalDrivePattern.split(',')[gear-1] || '1'
+                      : '1';
+                    // If no finalDrive2, force all to '1'
+                    if (!hasFinalDrive2) selected = '1';
+                    return (
+                      <button
+                        key={gear}
+                        type="button"
+                        className={`chip-btn${selected === '2' ? ' chip-btn-active' : ''}${!hasFinalDrive2 ? ' chip-btn-disabled' : ''}`}
+                        onClick={() => hasFinalDrive2 && handlePatternChange(gear, selected === '1' ? '2' : '1')}
+                        aria-label={`Toggle final drive for gear ${gear}`}
+                        disabled={!hasFinalDrive2}
+                        title={!hasFinalDrive2 ? 'Final Drive 2 not available' : ''}
                       >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                      </select>
-                    </div>
-                  ))}
+                        {selected}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
               <div className="wheel-config">
