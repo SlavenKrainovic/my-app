@@ -53,7 +53,7 @@ const SpeedChart = ({ chartData }) => {
   };
 
   return (
-    <div>
+    <div style={{ transform: 'translateX(-70px)' }}>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart
           data={chartData.data}
