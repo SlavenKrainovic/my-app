@@ -166,6 +166,7 @@ const SpeedChart = ({ chartData }) => {
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
+          marginLeft: '130px',
         }}>
           <div style={{
             fontWeight: 500,
