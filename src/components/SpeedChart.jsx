@@ -25,6 +25,13 @@ const SpeedChart = ({ chartData }) => {
   const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
   const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
 
+  // Automatsko generiranje tickova za Y-osi
+  const tickStep = roundedMaxRpm > 5000 ? 1000 : 500;
+  const yTicks = [];
+  for (let i = 0; i <= roundedMaxRpm; i += tickStep) {
+    yTicks.push(i);
+  }
+
   const colors = {
     1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
     2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
@@ -112,7 +119,7 @@ const SpeedChart = ({ chartData }) => {
               }
             }}
             domain={[0, roundedMaxRpm]}
-            tickCount={15}
+            ticks={yTicks}
             stroke="#86868b"
             tick={{
               fill: '#86868b',
