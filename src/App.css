@@ -38,6 +38,8 @@ html, body {
   width: 100%;
   min-height: 100vh;
   padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
@@ -63,6 +65,8 @@ html, body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   min-width: 850px;
   background: transparent;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 h1 {
@@ -352,6 +356,47 @@ select[name="gearbox"] {
   color: #fff;
   border-color: #0071e3;
   box-shadow: 0 2px 8px rgba(36,153,247,0.12);
+}
+
+/* Mobile centriranje */
+@media (max-width: 767px) {
+  html, body, #root {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    padding: 10px;
+    display: block;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 5px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-container, .chart-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+  
+  .chart-container {
+    overflow-x: auto;
+  }
+  
+  .chart-container > div {
+    min-width: 300px;
+  }
 }
 
 .chip-legend {
