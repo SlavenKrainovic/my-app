@@ -375,7 +375,7 @@ select[name="gearbox"] {
   .container {
     width: 100%;
     max-width: 100%;
-    padding: 0 5px;
+    padding: 0 5px 0 2px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -395,7 +395,8 @@ select[name="gearbox"] {
   }
   
   .chart-container > div {
-    min-width: 300px;
+    min-width: 400px;
+    width: 100%;
   }
 }
 
