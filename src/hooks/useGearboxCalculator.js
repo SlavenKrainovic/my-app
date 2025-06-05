@@ -76,6 +76,8 @@ export const useGearboxCalculator = () => {
       const cleanedGearbox = {
         name: selected.name,
         finalDrive: selected.finalDrive,
+        finalDrive2: selected.finalDrive2,
+        finalDrivePattern: selected.finalDrivePattern || '1,1,1,1,1,1,1',
       };
       for (let i = 1; i <= 7; i++) {
         const gearValue = selected[`gear${i}`];
@@ -113,6 +115,27 @@ export const useGearboxCalculator = () => {
     }
   }, [selectedGearbox]);
 
+  const handleFinalDrive2Change = useCallback((value) => {
+    if (selectedGearbox) {
+      const newGearbox = { ...selectedGearbox };
+      newGearbox.finalDrive2 = parseFloat(value) || 0;
+      setSelectedGearbox(newGearbox);
+      setChartData({ data: [], maxSpeed: 0 });
+    }
+  }, [selectedGearbox]);
+
+  const handlePatternChange = useCallback((gearNumber, value) => {
+    if (selectedGearbox) {
+      const patternArr = selectedGearbox.finalDrivePattern
+        ? selectedGearbox.finalDrivePattern.split(',')
+        : ['1','1','1','1','1','1','1'];
+      patternArr[gearNumber - 1] = value;
+      const newPattern = patternArr.join(',');
+      setSelectedGearbox({ ...selectedGearbox, finalDrivePattern: newPattern });
+      setChartData({ data: [], maxSpeed: 0 });
+    }
+  }, [selectedGearbox]);
+
   // Calculate speeds by calling backend API
   const calculateSpeeds = useCallback(async () => {
     if (!selectedGearbox.name) {
@@ -121,25 +144,34 @@ export const useGearboxCalculator = () => {
     }
     try {
       setLoading(true);
+      // Prepare finalDrive2 and pattern
+      const hasFinalDrive2 = !!selectedGearbox.finalDrive2 && selectedGearbox.finalDrive2 !== '' && selectedGearbox.finalDrive2 !== 0;
+      let finalDrivePattern = selectedGearbox.finalDrivePattern || '1,1,1,1,1,1,1';
+      if (!hasFinalDrive2) {
+        finalDrivePattern = '1,1,1,1,1,1,1';
+      }
+      const payload = {
+        maxRpm: parseInt(userInput.maxRpm),
+        gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
+        gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
+        gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
+        gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
+        gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
+        gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
+        gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
+        finalDrive: parseFloat(selectedGearbox.finalDrive) || 0,
+        finalDrivePattern,
+        finalDrive2: hasFinalDrive2 ? parseFloat(selectedGearbox.finalDrive2) : null,
+        tyreWidth: parseInt(userInput.tyreWidth),
+        tyreProfile: parseInt(userInput.tyreProfile),
+        wheelDiameter: parseInt(userInput.wheelDiameter)
+      };
       const response = await fetch('http://localhost:8081/api/v1/gearbox/calculateSpeeds', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          maxRpm: parseInt(userInput.maxRpm),
-          gearRatio1: parseFloat(selectedGearbox.gear1) || 0,
-          gearRatio2: parseFloat(selectedGearbox.gear2) || 0,
-          gearRatio3: parseFloat(selectedGearbox.gear3) || 0,
-          gearRatio4: parseFloat(selectedGearbox.gear4) || 0,
-          gearRatio5: parseFloat(selectedGearbox.gear5) || 0,
-          gearRatio6: parseFloat(selectedGearbox.gear6) || 0,
-          gearRatio7: parseFloat(selectedGearbox.gear7) || 0,
-          finalDrive: selectedGearbox.finalDrive,
-          tyreWidth: parseInt(userInput.tyreWidth),
-          tyreProfile: parseInt(userInput.tyreProfile),
-          wheelDiameter: parseInt(userInput.wheelDiameter)
-        })
+        body: JSON.stringify(payload)
       });
       if (!response.ok) {
         throw new Error('Failed to calculate speeds');
@@ -190,6 +222,8 @@ export const useGearboxCalculator = () => {
     handleInputChange,
     handleGearRatioChange,
     handleFinalDriveChange,
+    handleFinalDrive2Change,
+    handlePatternChange,
     calculateSpeeds
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -25,6 +25,13 @@ const SpeedChart = ({ chartData }) => {
   const maxRpm = Math.max(...chartData.data.map(item => item.rpm));
   const roundedMaxRpm = Math.ceil(maxRpm / 1000) * 1000;
 
+  // Automatsko generiranje tickova za Y-osi
+  const tickStep = roundedMaxRpm > 5000 ? 1000 : 500;
+  const yTicks = [];
+  for (let i = 0; i <= roundedMaxRpm; i += tickStep) {
+    yTicks.push(i);
+  }
+
   const colors = {
     1: 'rgba(0, 113, 227, 0.8)',   // Apple Blue
     2: 'rgba(48, 209, 88, 0.8)',    // Apple Green
@@ -35,7 +42,7 @@ const SpeedChart = ({ chartData }) => {
     7: 'rgba(94, 92, 230, 0.8)',    // Apple Indigo
   };
 
-  const handleMouseMove = useCallback((data) => {
+  const handleMouseMove = (data) => {
     if (data && data.activePayload) {
       const speed = data.activeLabel;
       const gearData = chartData.data
@@ -46,14 +53,14 @@ const SpeedChart = ({ chartData }) => {
         }, {});
       setHoverData({ speed, gearData });
     }
-  }, [chartData.data]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     setHoverData(null);
-  }, []);
+  };
 
   return (
-    <div>
+    <div style={{ transform: 'translateX(-70px)' }}>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart
           data={chartData.data}
@@ -112,7 +119,7 @@ const SpeedChart = ({ chartData }) => {
               }
             }}
             domain={[0, roundedMaxRpm]}
-            tickCount={15}
+            ticks={yTicks}
             stroke="#86868b"
             tick={{
               fill: '#86868b',
@@ -163,14 +170,10 @@ const SpeedChart = ({ chartData }) => {
       </ResponsiveContainer>
       {hoverData && (
         <div style={{
-          marginTop: '20px',
-          padding: '16px',
-          borderRadius: '12px',
-          color: '#1d1d1f',
           display: 'flex',
-          flexWrap: 'wrap',
-          gap: '20px',
-          alignItems: 'center'
+          flexDirection: 'column',
+          gap: '8px',
+          marginLeft: '130px',
         }}>
           <div style={{
             fontWeight: 500,
@@ -180,21 +183,32 @@ const SpeedChart = ({ chartData }) => {
           }}>
             <h3>Speed: {hoverData.speed.toFixed(0)} KPH</h3>
           </div>
-          {gears.map(gear => (
-            <div key={gear} style={{
-              color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
-              opacity: hoverData.gearData[gear] ? 1 : 0.7,
-              fontWeight: 500,
-              minWidth: '140px',
-              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
-              fontSize: '13px'
-            }}>
-              Gear {gear}: {hoverData.gearData[gear] ?
-                `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
-                'N/A'
-              }
-            </div>
-          ))}
+          <div style={{
+            display: 'block',
+            overflowX: 'auto',
+            whiteSpace: 'nowrap',
+            width: '100%',
+            paddingBottom: '2px'
+          }}>
+            {gears.map(gear => (
+              <div key={gear} style={{
+                display: 'inline-block',
+                color: hoverData.gearData[gear] ? colors[gear].replace('0.8', '1') : '#86868b',
+                opacity: hoverData.gearData[gear] ? 1 : 0.7,
+                fontWeight: 500,
+                minWidth: '90px',
+                marginRight: '10px',
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif",
+                fontSize: '13px',
+                verticalAlign: 'top'
+              }}>
+                Gear {gear}: {hoverData.gearData[gear] ?
+                  `${Math.round(hoverData.gearData[gear]).toLocaleString()} RPM` :
+                  'N/A'
+                }
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -210,6 +224,13 @@ SpeedChart.propTypes = {
     })).isRequired,
     maxSpeed: PropTypes.number.isRequired
   }).isRequired
+};
+
+SpeedChart.defaultProps = {
+  chartData: {
+    data: [],
+    maxSpeed: 0
+  }
 };
 
 export default SpeedChart;
